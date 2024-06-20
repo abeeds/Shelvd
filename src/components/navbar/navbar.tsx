@@ -7,7 +7,6 @@ interface Page {
 }
 
 
-// need to also take an SVG
 const PAGES: Page[] = [
     {   label: 'Search', 
         destination: '',
