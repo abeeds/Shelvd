@@ -15,6 +15,7 @@
   "dependencies": {
     "config": "^3.3.12",
     "cors": "^2.8.5",
+    "dayjs": "^1.11.11",
     "express": "^4.19.2",
     "mongoose": "^8.4.4",
     "nanoid": "^5.0.7",

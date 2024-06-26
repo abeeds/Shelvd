@@ -1,8 +1,9 @@
 import express from 'express';
+import config from 'config'
 
 
 const app = express();
-const PORT = 3000;
+const PORT = config.get<number>('port');
 
 
 app.listen(PORT, () => {
