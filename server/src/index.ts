@@ -7,5 +7,5 @@ const PORT = 3000;
 
 
 app.listen(PORT, () => {
-    log.info(`Server is running on Port ${PORT}`);
+    log.info(`Server is running on https://localhost:${PORT}`);
 });
