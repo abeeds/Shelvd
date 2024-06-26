@@ -1,11 +1,11 @@
 import express from 'express';
-import config from 'config'
+import log from './utils/logger'
 
 
 const app = express();
-const PORT = config.get<number>('port');
+const PORT = 3000;
 
 
 app.listen(PORT, () => {
-    console.log(`Server is running on Port ${PORT}`);
+    log.info(`Server is running on Port ${PORT}`);
 });

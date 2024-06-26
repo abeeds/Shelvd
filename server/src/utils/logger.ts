@@ -3,7 +3,6 @@ const pino = require('pino');
 
 
 const log = pino({
-    prettyPrint: true,
     base: {
         pid: false,
     },
