@@ -2,9 +2,12 @@
 # Shelvd
 
 ## Build and Run
-- run `npm install` to install any relevant packages
-- create a `.env` file to the root of the repository
-  - create the following variables:
-    - IGDB_CLIENT_ID, IGDB_CLIENT_SECRET, IGDB_ACCESS_TOKEN
-    - 
-- run `npm run dev` to run the client
+- run `npm install` in both the client and server folders
+- Running the server:
+    - For Development:
+        - run `npm run dev`
+    - To build and run normally:
+        - run `npm run build`
+        - then `npm run start` to run it
+- Running the client:
+    - run `npm run dev`
