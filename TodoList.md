@@ -1,10 +1,8 @@
-# To-do List
-## Essential
-- Get relevant API Keys
-  - Write functions to search from the API
-  - Figure out way to store data retrieved from API to reduce API calls
+# Frontend
+- Figure out way to store data retrieved from API to reduce API calls
 - Design Search Page
   - Design search bar
+  - add redirect links if the person wants to add something that isn't in any of the apis
 - Design Search Result Page
   - Allow user to sort by media type
 - Design a page that shows data of individual piece of media
@@ -29,3 +27,31 @@
 - Custom themes/colors
 - Upload custom cover/poster image
 - Allow exporting data as CSV
+
+# Backend
+- Get relevant API Keys
+  - Write functions to search from the APIs
+- Collections to make:
+  - Users
+  - Shelves
+    - description written by the user
+    - specify if public or private
+    - should record different pieces of media and their relevant info
+    - can store shelves within shelves for further organization
+      - record parent and child shelves on each document
+    - for each piece of media:
+      - record any id/object id and the cover id(maybe)
+- Endpoints, which will need UNIT TESTS
+  - user related stuff
+    - login
+    - logout
+    - register
+    - update user/pass/etc
+  - shelf related stuff
+    - create shelves
+    - "move" shelves 
+      - reassign parent/child relationships
+    - update shelf info
+    - delete shelf
+      - need to handle parent/child stuff carefully
+      - could just move shelves up a tier in a deep shelf tree
