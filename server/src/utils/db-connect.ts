@@ -7,7 +7,7 @@ const DB_NAME = "Shelvd";
 const LOCAL_STRING = "mongodb://localhost:27017";
 
 
-async function db_connect() {
+export default async function db_connect() {
     if(mongoose.connection.readyState === 0) {
         logger.info('Connecting to DB because it is disconnected');
 
@@ -35,5 +35,3 @@ async function db_connect() {
         }
     }
 }
-
-export default db_connect;
