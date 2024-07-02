@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 const pino = require('pino');
 
 
-const log = pino({
+const logger = pino({
     transport: {
         target: 'pino-pretty',
         options: {
@@ -16,4 +16,4 @@ const log = pino({
 });
 
 
-export default log;
+export default logger;

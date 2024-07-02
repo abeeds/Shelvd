@@ -1,7 +1,7 @@
 import express from 'express';
-import log from './utils/logger';
+import logger from './utils/logger';
 import routes from './utils/routes';
-
+import db_connect from './utils/db-connect';
 
 
 const app = express();
@@ -9,8 +9,8 @@ const PORT = 3000;
 
 
 app.listen(PORT, () => {
-    log.info(`Server is running on http://localhost:${PORT}`);
+    logger.info(`Server is running on http://localhost:${PORT}`);
+    db_connect();
 
-    // all endpoints defined here
-    routes(app);
+    routes(app);    // all endpoints defined here
 });
