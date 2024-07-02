@@ -1,5 +1,5 @@
 import mongoose, { ConnectionStates } from "mongoose";
-import logger from './logger';
+import logger from '../logger';
 require('dotenv').config();
 
 

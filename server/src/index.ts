@@ -1,7 +1,7 @@
 import express from 'express';
 import logger from './utils/logger';
 import routes from './utils/routes';
-import db_connect from './utils/db-connect';
+import db_connect from './utils/database/db-connect';
 
 
 const app = express();
