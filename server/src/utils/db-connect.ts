@@ -21,7 +21,7 @@ export default async function db_connect() {
         }
         else {
             if(process.env.CLOUD_MONGO === undefined) {
-                logger.warn('CLOUD_MONGO not defined in environment variables.');
+                logger.warn('CLOUD_MONGO not defined in the `.env`.');
             }
 
             logger.info('Connecting to LOCAL database.');
