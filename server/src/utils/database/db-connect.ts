@@ -1,13 +1,13 @@
-import mongoose, { ConnectionStates } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import logger from '../logger';
 require('dotenv').config();
 
 
-const DB_NAME = "Shelvd";
 const LOCAL_STRING = "mongodb://localhost:27017";
+const DB_NAME = "Shelvd";
 
 
-export default async function db_connect() {
+export default async function dbConnect() {
     if(mongoose.connection.readyState === 0) {
         logger.info('Connecting to DB because it is disconnected.');
         var connection_string:string;
@@ -29,6 +29,7 @@ export default async function db_connect() {
         }
 
         try{
+            connection_string += `/${DB_NAME}`;
             await mongoose.connect(connection_string);
         }
         catch {
@@ -40,3 +41,27 @@ export default async function db_connect() {
         logger.info(`readyState: ${mongoose.connection.readyState}.`);
     }
 }
+
+
+export async function insertOne<T extends Document>(
+    collection_name: string,
+    schema: Schema, 
+    object: Record<string, any>
+    ) {
+    dbConnect();
+    
+    if (mongoose.connection.readyState === 1) {
+        try {
+            const my_model = mongoose.model<T>(collection_name, schema);
+            const new_document = new my_model(object);
+            return await new_document.save();
+        } catch (error) {
+            logger.error('Could not save the document:', error);
+            return null;
+        }
+    } else {
+        console.error('Could not insert one. DB is disconnected.');
+        return null;
+    }
+}
+
