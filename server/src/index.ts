@@ -9,7 +9,7 @@ const PORT = 3000;
 
 
 app.listen(PORT, () => {
-    logger.info(`Server is running on http://localhost:${PORT}`);
+    logger.info(`Server is running on http://localhost:${PORT}.`);
     db_connect();
 
     routes(app);    // all endpoints defined here

@@ -9,7 +9,7 @@ const LOCAL_STRING = "mongodb://localhost:27017";
 
 export default async function db_connect() {
     if(mongoose.connection.readyState === 0) {
-        logger.info('Connecting to DB because it is disconnected');
+        logger.info('Connecting to DB because it is disconnected.');
         var connection_string:string;
 
         // define the connection_string by checking CLOUD_MONGO
@@ -37,6 +37,6 @@ export default async function db_connect() {
                 + 'and the provided connection strings are correct.')
         }
 
-        logger.info(`readyState: ${mongoose.connection.readyState}`);
+        logger.info(`readyState: ${mongoose.connection.readyState}.`);
     }
 }
