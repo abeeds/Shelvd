@@ -5,13 +5,20 @@ import logger from "./logger";
 
 function routes(app: Express) {
     app.get('/test/hello_world', (req: Request, res: Response) => {
-        logger.info(`${req.socket.remoteAddress} is calling /test/hello_world`);
+        logger.info(`${req.socket.remoteAddress}: /test/hello_world`);
         
         res.status(200).send('Hello World!');
     })
 
+
+    // test/user
+    app.get('/test/user'), (req: Request, res: Response) => {
+        
+    }
+
+
     app.post('/test/user', (req: Request, res: Response) => {
-        logger.info(`${req.socket.remoteAddress} is calling /test/user`);
+        logger.info(`${req.socket.remoteAddress}: /test/user`);
         const username: string = req.body.username;
         const email: string = req.body.email;
         const password: string = req.body.password;
