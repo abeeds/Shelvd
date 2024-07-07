@@ -1,11 +1,11 @@
 import { insertOne } from "./db-connect";
-import { user, userSchema } from "./schemas/user";
+import { userSchema } from "./schemas/user";
 
 
 const USERS_COLLECT = 'users';
 
 
-async function insertUser(email: string, username: string, password: string) {
+export async function insertUser(email: string, username: string, password: string) {
     const newUser = {
         email: email,
         username: username,
