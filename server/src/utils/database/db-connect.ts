@@ -64,4 +64,3 @@ export async function insertOne<T extends Document>(
         return null;
     }
 }
-

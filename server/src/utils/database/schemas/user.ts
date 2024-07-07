@@ -1,7 +1,7 @@
 import { Schema, Document } from "mongoose";
 
 
-export interface user extends Document {
+interface user extends Document {
     email: string;
     username: string;
     password: string;
