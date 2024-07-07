@@ -6,7 +6,7 @@ import db_connect from './utils/database/db-connect';
 
 const PORT = 3000;
 const app = express();
-app.use(express.json);
+app.use(express.json());
 
 
 app.listen(PORT, () => {
