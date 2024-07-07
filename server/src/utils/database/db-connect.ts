@@ -47,7 +47,7 @@ export async function insertOne<T extends Document>(
     collection_name: string,
     schema: Schema, 
     object: Record<string, any>
-    ) {
+) {
     dbConnect();
     
     if (mongoose.connection.readyState === 1) {
@@ -61,6 +61,32 @@ export async function insertOne<T extends Document>(
         }
     } else {
         console.error('Could not insert one. DB is disconnected.');
+        return null;
+    }
+}
+
+
+export async function findMany<T extends Document> (
+    collection_name: string,
+    schema: Schema,
+    search_params: Record<string, any>={},
+    sort: Record<string, any>={},
+    limit: number=25,
+    skip: number=0
+) {
+    dbConnect();
+    
+    if (mongoose.connection.readyState === 1) {
+        const my_model = mongoose.model<T>(collection_name, schema);
+        var query = await my_model.find(
+            search_params.
+            sort(sort).
+            limit(limit).
+            skip(skip).
+            exec()
+        )
+    } else {
+        console.error('Could not search. DB is disconnected.');
         return null;
     }
 }
