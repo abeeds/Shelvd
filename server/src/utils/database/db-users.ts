@@ -13,5 +13,11 @@ export async function insertUser(email: string, username: string, password: stri
         creationDate: new Date(),
     }
 
-    insertOne(USERS_COLLECT, userSchema, newUser);
+    // returns true or false
+    return insertOne(USERS_COLLECT, userSchema, newUser);
+}
+
+
+export async function getUsers() {
+    
 }
