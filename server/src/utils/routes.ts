@@ -15,8 +15,19 @@ function routes(app: Express) {
     // test/user
     app.get('/test/user', async (req: Request, res: Response) => {
         logger.info(`[${req.socket.remoteAddress}] [GET] [/test/user]`);
-        const users = await getUsers();
-        res.status(200).send(users);
+        try {
+            const users = await getUsers();
+            res.status(200).send(users);
+            logger.info(`[${req.socket.remoteAddress}] [GET] [/test/user] ` 
+                + `Success.`
+            );
+        } catch {
+            logger.error(`[${req.socket.remoteAddress}] [GET] [/test/user] ` 
+                + `Could not get users.`
+            );
+            res.status(500).send();
+        }
+        
     })
 
     /*
