@@ -49,7 +49,7 @@ export async function insertOne<T extends Document>(
     object: Record<string, any>
 ) {
     dbConnect();
-    
+
     if (mongoose.connection.readyState === 1) {
         try {
             const my_model = mongoose.model<T>(collection_name, schema);
@@ -66,6 +66,10 @@ export async function insertOne<T extends Document>(
 }
 
 
+/*
+    returns an object satisfying the search
+    the object's keys are the documents' ids
+*/
 export async function findMany<T extends Document> (
     collection_name: string,
     schema: Schema,
@@ -75,16 +79,23 @@ export async function findMany<T extends Document> (
     skip: number=0
 ) {
     dbConnect();
-    
+
     if (mongoose.connection.readyState === 1) {
         const my_model = mongoose.model<T>(collection_name, schema);
-        var query = await my_model.find(
-            search_params.
-            sort(sort).
-            limit(limit).
-            skip(skip).
-            exec()
-        )
+        let output: { [key: string]: T} = {};
+        
+        let query = my_model.find();
+        if(Object.keys(search_params).length > 0) {
+            query = my_model.find(search_params);
+        }
+
+        query = query.sort(sort).limit(limit).skip(skip);
+        let results = await query.exec();
+
+        results.forEach(doc => {
+            output[doc._id.toString()] = doc.toObject();
+        })
+        return output;
     } else {
         logger.error('Could not search. DB is disconnected.');
         return null;
