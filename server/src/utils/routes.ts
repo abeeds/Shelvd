@@ -13,11 +13,10 @@ function routes(app: Express) {
 
 
     // test/user
-    app.get('/test/user', (req: Request, res: Response) => {
+    app.get('/test/user', async (req: Request, res: Response) => {
         logger.info(`[${req.socket.remoteAddress}] [GET] [/test/user]`);
-        res.status(200).send(
-            getUsers()
-        )
+        const users = await getUsers();
+        res.status(200).send(users);
     })
 
     /*

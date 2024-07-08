@@ -1,4 +1,4 @@
-import { insertOne } from "./db-connect";
+import { findMany, insertOne } from "./db-connect";
 import { userSchema } from "./schemas/user";
 
 
@@ -18,6 +18,9 @@ export async function insertUser(email: string, username: string, password: stri
 }
 
 
+/*
+    need to add ways to narrow down the search
+*/
 export async function getUsers() {
-    
+    return findMany(USERS_COLLECT, userSchema);
 }
