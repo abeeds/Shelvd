@@ -60,7 +60,7 @@ export async function insertOne<T extends Document>(
             return null;
         }
     } else {
-        console.error('Could not insert one. DB is disconnected.');
+        logger.error('Could not insert one. DB is disconnected.');
         return null;
     }
 }
@@ -86,7 +86,7 @@ export async function findMany<T extends Document> (
             exec()
         )
     } else {
-        console.error('Could not search. DB is disconnected.');
+        logger.error('Could not search. DB is disconnected.');
         return null;
     }
 }
