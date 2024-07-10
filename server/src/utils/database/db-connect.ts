@@ -67,9 +67,42 @@ export async function insertOne<T extends Document>(
 
 
 /*
-    returns a promise of docments satisfying the search
-    the object's keys are the documents' ids\
-    need to use await to actually get results
+    Returns a promise of a single document satisfying the search.
+    The document is returned as an object.
+    - need to use await to actually get results
+    TODO: allow limiting to only specific fields
+*/
+export async function findOne<T extends Document> (
+    collection_name: string,
+    schema: Schema,
+    search_params: Record<string, any>
+) {
+    dbConnect();
+
+    if (mongoose.connection.readyState === 1) {
+        const my_model = mongoose.model<T>(collection_name, schema);
+        let output: { [key: string]: T} = {};
+        let query = my_model.findOne(search_params);
+        let result = await query.exec();
+
+        if(result !== null) {
+            output = result.toObject();
+        }
+
+        return output;
+    } else {
+        logger.error('Could not search. DB is disconnected.');
+        return null;
+    }
+}
+
+
+/*
+    Returns a promise of documents satisfying the search.
+    The documents are returned as an object where the
+    the sub-object's keys are the _id fields of the objects.
+    - need to use await to actually get results
+    TODO: allow limiting to only specific fields
 */
 export async function findMany<T extends Document> (
     collection_name: string,
@@ -84,7 +117,7 @@ export async function findMany<T extends Document> (
     if (mongoose.connection.readyState === 1) {
         const my_model = mongoose.model<T>(collection_name, schema);
         let output: { [key: string]: T} = {};
-        
+
         let query = my_model.find();
         if(Object.keys(search_params).length > 0) {
             query = my_model.find(search_params);
