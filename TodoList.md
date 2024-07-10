@@ -41,6 +41,9 @@
       - record parent and child shelves on each document
     - for each piece of media:
       - record any id/object id and the cover id(maybe)
+- DB Connect functions:
+  - update one & many
+  - delete one & many
 - Endpoints, which will need UNIT TESTS
   - user related stuff
     - login
