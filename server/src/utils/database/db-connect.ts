@@ -67,8 +67,9 @@ export async function insertOne<T extends Document>(
 
 
 /*
-    returns an object satisfying the search
-    the object's keys are the documents' ids
+    returns a promise of docments satisfying the search
+    the object's keys are the documents' ids\
+    need to use await to actually get results
 */
 export async function findMany<T extends Document> (
     collection_name: string,
