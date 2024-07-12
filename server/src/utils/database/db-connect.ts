@@ -9,22 +9,22 @@ const DB_NAME = "Shelvd";
 
 export default async function dbConnect() {
     if(mongoose.connection.readyState === 0) {
-        logger.info('Connecting to DB because it is disconnected.');
+        logger.info('[dbConnect] Connecting to DB because it is disconnected.');
         var connection_string:string;
 
         // define the connection_string by checking CLOUD_MONGO
         // if 0 or undefined: local
         // if 1: cloud
         if(process.env.CLOUD_MONGO !== undefined && process.env.CLOUD_MONGO === '1') {
-            logger.info('Connecting to CLOUD database.');
+            logger.info('[dbConnect] Connecting to CLOUD database.');
             connection_string = `${process.env.CLOUD_STRING}`;
         }
         else {
             if(process.env.CLOUD_MONGO === undefined) {
-                logger.warn('CLOUD_MONGO not defined in the `.env`.');
+                logger.warn('[dbConnect] CLOUD_MONGO not defined in the `.env`.');
             }
 
-            logger.info('Connecting to LOCAL database.');
+            logger.info('[dbConnect] Connecting to LOCAL database.');
             connection_string = LOCAL_STRING;
         }
 
@@ -33,12 +33,12 @@ export default async function dbConnect() {
             await mongoose.connect(connection_string);
         }
         catch {
-            logger.error('Failed to connect to DB.');
-            logger.error('Please check that the DB is running '
+            logger.error('[dbConnect] Failed to connect to DB.');
+            logger.error('[dbConnect] Please check that the DB is running '
                 + 'and the provided connection strings are correct.')
         }
 
-        logger.info(`readyState: ${mongoose.connection.readyState}.`);
+        logger.info(`[dbConnect] readyState: ${mongoose.connection.readyState}.`);
     }
 }
 
@@ -56,11 +56,11 @@ export async function insertOne<T extends Document>(
             const new_document = new my_model(object);
             return await new_document.save();
         } catch (error) {
-            logger.error('Could not save the document:', error);
+            logger.error('[insertOne] Could not save the document:', error);
             return null;
         }
     } else {
-        logger.error('Could not insert one. DB is disconnected.');
+        logger.error('[insertOne] Could not insert one. DB is disconnected.');
         return null;
     }
 }
@@ -91,7 +91,7 @@ export async function findOne<T extends Document> (
 
         return output;
     } else {
-        logger.error('Could not search. DB is disconnected.');
+        logger.error('[findOne] Could not search. DB is disconnected.');
         return null;
     }
 }
@@ -131,7 +131,28 @@ export async function findMany<T extends Document> (
         })
         return output;
     } else {
-        logger.error('Could not search. DB is disconnected.');
+        logger.error('[findMany] Could not search. DB is disconnected.');
         return null;
+    }
+}
+
+
+/*
+    Finds a document based on the filters provided and updates
+    it with the values provided in update_obj
+    Returns true or false depending on whether it updated or not
+*/
+export async function updateOne<T extends Document>(
+    collection_name: string,
+    schema: Schema,
+    filter: Record<string, any>,
+    update_obj: Record<string, any>
+) {
+    try{
+        const my_model = mongoose.model<T>(collection_name, schema);
+        return (await my_model.findOneAndUpdate(filter, update_obj, {new: true})) !== null;
+    }
+    catch(error) {
+        logger.error('[updateOne] Could not update document.', error)
     }
 }
