@@ -42,7 +42,7 @@
     - for each piece of media:
       - record any id/object id and the cover id(maybe)
 - DB Connect functions:
-  - delete one & many
+  - delete many
 - Endpoints, which will need UNIT TESTS
   - user related stuff
     - login

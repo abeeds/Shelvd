@@ -150,9 +150,28 @@ export async function updateOne<T extends Document>(
 ) {
     try{
         const my_model = mongoose.model<T>(collection_name, schema);
-        return (await my_model.findOneAndUpdate(filter, update_obj, {new: true})) !== null;
+        return await my_model.findOneAndUpdate(filter, update_obj, {new: true}) !== null;
     }
     catch(error) {
         logger.error('[updateOne] Could not update document.', error)
+    }
+}
+
+
+/*
+    Deletes a doc with the provided filter
+    Returns true or false depending on whether it was deleted or not
+*/
+export async function deleteOne<T extends Document>(
+    collection_name: string,
+    schema: Schema,
+    filter: Record<string, any>
+) {
+    try{
+        const my_model = mongoose.model<T>(collection_name, schema);
+        return await my_model.findOneAndDelete(filter) !== null;
+    }
+    catch(error) {
+        logger.error('[deleteOne] Could not delete document.', error)
     }
 }
