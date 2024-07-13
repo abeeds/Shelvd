@@ -102,12 +102,12 @@ export async function findOne<T extends Document> (
     The documents are returned as an object where the
     the sub-object's keys are the _id fields of the objects.
     - need to use await to actually get results
-    TODO: allow limiting to only specific fields
 */
 export async function findMany<T extends Document> (
     collection_name: string,
     schema: Schema,
     search_params: Record<string, any>={},
+    select: string='',
     sort: Record<string, any>={},
     limit: number=25,
     skip: number=0
@@ -118,15 +118,16 @@ export async function findMany<T extends Document> (
         const my_model = mongoose.model<T>(collection_name, schema);
         let output: { [key: string]: T} = {};
 
-        let query = my_model.find();
-        if(Object.keys(search_params).length > 0) {
-            query = my_model.find(search_params);
-        }
+        let query = await my_model
+            .find(search_params)
+            .sort(sort)
+            .limit(limit)
+            .skip(skip)
+            .select(select)
+            .exec();
 
-        query = query.sort(sort).limit(limit).skip(skip);
-        let results = await query.exec();
-
-        results.forEach(doc => {
+        // turn query into an object
+        query.forEach(doc => {
             output[doc._id.toString()] = doc.toObject();
         })
         return output;

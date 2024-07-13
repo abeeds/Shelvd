@@ -2,7 +2,12 @@ import { findMany, insertOne } from "./db-connect";
 import { userSchema } from "./schemas/user";
 
 
+// fields
 const USERS_COLLECT = 'users';
+const EMAIL = 'email';
+const USERNAME = 'username';
+const PASSWORD = 'password';
+const CREATION_DATE = 'creationDate';
 
 
 export async function insertUser(email: string, username: string, password: string) {
@@ -22,5 +27,9 @@ export async function insertUser(email: string, username: string, password: stri
     need to add ways to narrow down the search
 */
 export async function getUsers() {
-    return findMany(USERS_COLLECT, userSchema);
+    const fields = `${CREATION_DATE} ${EMAIL} ${USERNAME}`;
+
+    return findMany(
+        USERS_COLLECT, userSchema, {/*empty to skip this param*/}, fields
+    );
 }
