@@ -1,17 +1,9 @@
 import { Express, Request, Response } from "express";
-import mongoose from "mongoose";
-import { getUsers, insertUser } from "./middleware/database/db-users";
-import logger from "./utils/logger";
+import { getUsers, insertUser } from "../middleware/database/db-users";
+import logger from "../utils/logger";
 
 
-function routes(app: Express) {
-    app.get('/test/hello_world', (req: Request, res: Response) => {
-        logger.info(`${req.socket.remoteAddress}: /test/hello_world`);
-
-        res.status(200).send('Hello World!');
-    })
-
-
+function userRoutes(app: Express) {
     // test/user
     app.get('/test/user', async (req: Request, res: Response) => {
         logger.info(`[${req.socket.remoteAddress}] [GET] [/test/user]`);
@@ -55,5 +47,4 @@ function routes(app: Express) {
     })
 }
 
-
-export default routes;
+export default userRoutes;

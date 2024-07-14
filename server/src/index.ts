@@ -1,6 +1,6 @@
 import express from 'express';
 import logger from './utils/logger';
-import routes from './routes';
+import routes from './routes/routes';
 import db_connect from './middleware/database/db-connect';
 
 
