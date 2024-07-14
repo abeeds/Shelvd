@@ -28,15 +28,8 @@ export default async function dbConnect() {
             connection_string = LOCAL_STRING;
         }
 
-        try{
-            connection_string += `/${DB_NAME}`;
-            await mongoose.connect(connection_string);
-        }
-        catch {
-            logger.error('[dbConnect] Failed to connect to DB.');
-            logger.error('[dbConnect] Please check that the DB is running '
-                + 'and the provided connection strings are correct.')
-        }
+        connection_string += `/${DB_NAME}`;
+        await mongoose.connect(connection_string);
 
         logger.info(`[dbConnect] readyState: ${mongoose.connection.readyState}.`);
     }
