@@ -39,7 +39,7 @@ export async function getUsers() {
     updates username, identified by old_username, to new_username
     true: updated successfully
     false: couldn't find object
-    null: something went wrong
+    null: something went wrong or db is not connected
 */
 export async function updateUsername(
     old_username: string,
@@ -47,11 +47,11 @@ export async function updateUsername(
 ) {
     const filt = {
         USERNAME: old_username
-    }
+    };
 
     const update_obj = {
         USERNAME: new_username
-    }
+    };
 
-    return updateOne(USERS_COLLECT, userSchema, filt, update_obj)
+    return updateOne(USERS_COLLECT, userSchema, filt, update_obj);
 }
