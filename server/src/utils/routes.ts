@@ -15,16 +15,16 @@ function routes(app: Express) {
     // test/user
     app.get('/test/user', async (req: Request, res: Response) => {
         logger.info(`[${req.socket.remoteAddress}] [GET] [/test/user]`);
-        try {
+        try{
             const users = await getUsers();
             res.status(200).send(users);
             logger.info(`[${req.socket.remoteAddress}] [GET] [/test/user] ` 
                 + `Success.`
             );
-        } catch {
-            logger.error(`[${req.socket.remoteAddress}] [GET] [/test/user] ` 
-                + `Could not get users.`
-            );
+        }
+        catch(error) {
+            logger.error(`[${req.socket.remoteAddress}] [GET] [/test/user]: `
+                + error);
             res.status(500).send();
         }
         
@@ -40,26 +40,18 @@ function routes(app: Express) {
         const email: string = req.body.email;
         const password: string = req.body.password;
         
-        if(mongoose.connection.readyState !== 1) {
-            logger.error(`[${req.socket.remoteAddress}] [POST] [/test/user]: `
-                + `Failed to connect to the database.`);
-
-            res.status(500).send(`Failed to connect to the database.`);
-            return;
-        }
-
-        if(insertUser(username, email, password) !== null) {
+        try {
+            insertUser(username, email, password);
             logger.info(`[${req.socket.remoteAddress}] [POST] [/test/user]: `
-                + `Created user successfully.`);
+                        + `Created user successfully.`);
 
             res.status(200).send();
-        }
-        else {
+        } catch(error) {
             logger.error(`[${req.socket.remoteAddress}] [POST] [/test/user]: `
-                + `Could not insert user`);
+                + error);
 
-            res.status(500).send(`Something went wrong.`)
-        }
+            res.status(500).send();
+        };
     })
 }
 

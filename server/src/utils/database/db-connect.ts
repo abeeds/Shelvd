@@ -51,14 +51,9 @@ export async function insertOne<T extends Document>(
     dbConnect();
 
     if (mongoose.connection.readyState === 1) {
-        try {
-            const my_model = mongoose.model<T>(collection_name, schema);
-            const new_document = new my_model(object);
-            return await new_document.save();
-        } catch (error) {
-            logger.error('[insertOne] Could not save the document:', error);
-            return null;
-        }
+        const my_model = mongoose.model<T>(collection_name, schema);
+        const new_document = new my_model(object);
+        return await new_document.save();
     } else {
         logger.error('[insertOne] Could not insert one. DB is disconnected.');
         return null;
@@ -151,14 +146,8 @@ export async function updateOne<T extends Document>(
 ) {
     dbConnect();
     if (mongoose.connection.readyState === 1) {
-        try{
-            const my_model = mongoose.model<T>(collection_name, schema);
-            return await my_model.findOneAndUpdate(filter, update_obj, {new: true}) !== null;
-        }
-        catch(error) {
-            logger.error('[updateOne] Could not update document.', error);
-            return null;
-        }
+        const my_model = mongoose.model<T>(collection_name, schema);
+        return await my_model.findOneAndUpdate(filter, update_obj, {new: true}) !== null;
     }
     else {
         logger.error('[updateOne] Could not update. DB is disconnected');
@@ -176,11 +165,6 @@ export async function deleteOne<T extends Document>(
     schema: Schema,
     filter: Record<string, any>
 ) {
-    try{
-        const my_model = mongoose.model<T>(collection_name, schema);
-        return await my_model.findOneAndDelete(filter) !== null;
-    }
-    catch(error) {
-        logger.error('[deleteOne] Could not delete document.', error)
-    }
+    const my_model = mongoose.model<T>(collection_name, schema);
+    return await my_model.findOneAndDelete(filter) !== null;
 }
