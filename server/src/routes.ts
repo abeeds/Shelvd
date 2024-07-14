@@ -1,7 +1,7 @@
 import { Express, Request, Response } from "express";
 import mongoose from "mongoose";
-import { getUsers, insertUser } from "../middleware/database/db-users";
-import logger from "./logger";
+import { getUsers, insertUser } from "./middleware/database/db-users";
+import logger from "./utils/logger";
 
 
 function routes(app: Express) {
