@@ -1,6 +1,6 @@
 import { Express, Request, Response } from "express";
 import mongoose from "mongoose";
-import { getUsers, insertUser } from "./database/db-users";
+import { getUsers, insertUser } from "../middleware/database/db-users";
 import logger from "./logger";
 
 

@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import logger from '../logger';
+import logger from '../../utils/logger';
 require('dotenv').config();
 
 
