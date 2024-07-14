@@ -35,7 +35,7 @@ function userRoutes(app: Express) {
         try {
             insertUser(username, email, password);
             logger.info(`[${req.socket.remoteAddress}] [POST] [/test/user]: `
-                        + `Created user successfully.`);
+                        + `Success.`);
 
             res.status(200).send();
         } catch(error) {
