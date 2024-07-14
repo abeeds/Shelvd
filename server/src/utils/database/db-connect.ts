@@ -149,12 +149,20 @@ export async function updateOne<T extends Document>(
     filter: Record<string, any>,
     update_obj: Record<string, any>
 ) {
-    try{
-        const my_model = mongoose.model<T>(collection_name, schema);
-        return await my_model.findOneAndUpdate(filter, update_obj, {new: true}) !== null;
+    dbConnect();
+    if (mongoose.connection.readyState === 1) {
+        try{
+            const my_model = mongoose.model<T>(collection_name, schema);
+            return await my_model.findOneAndUpdate(filter, update_obj, {new: true}) !== null;
+        }
+        catch(error) {
+            logger.error('[updateOne] Could not update document.', error);
+            return null;
+        }
     }
-    catch(error) {
-        logger.error('[updateOne] Could not update document.', error)
+    else {
+        logger.error('[updateOne] Could not update. DB is disconnected');
+        return null;
     }
 }
 
