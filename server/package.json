@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "find src/tests -name '*.test.ts' -exec node --test --require ts-node/register {} +",
     "build": "tsc --build",
     "start": "node ./build/index.js",
     "dev": "nodemon ./src/index.ts"
