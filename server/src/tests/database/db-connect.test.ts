@@ -1,9 +1,9 @@
 import assert from "node:assert";
 import test from "node:test";
-import { describe, after } from "node:test";
-import { userSchema } from "../../middleware/database/schemas/user";
-import { dbConnect, insertOne, updateOne } from "../../middleware/database/db-connect";
 import mongoose from "mongoose";
+import { describe, after } from "node:test";
+import { dbConnect, deleteOne, insertOne, updateOne } from "../../middleware/database/db-connect";
+import { userSchema } from "../../middleware/database/schemas/user";
 import { USERS_COLLECT } from "../../middleware/database/db-users";
 
 const TEST_EMAIL = 'qrst@gmail.com';
@@ -76,4 +76,27 @@ describe('tests', async () => {
         // cleanup
         await my_model.findOneAndDelete(filt);
     });
+
+
+    test('deleteOne', async () => {
+        let filt = {
+            'email': TEST_EMAIL,
+            'username': TEST_USRNM,
+            'password': TEST_PW
+        };
+
+        // create the new document
+        const my_model = mongoose.model(USERS_COLLECT, userSchema);
+        const doc = new my_model(filt);
+        await doc.save();
+
+        await deleteOne(
+            USERS_COLLECT,
+            userSchema, 
+            filt
+        );
+
+        let search = await my_model.findOne(filt);
+        assert(search === null);
+    })
 });
