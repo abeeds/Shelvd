@@ -4,6 +4,8 @@ name: Shelvd CI/CD
 on:
   # Triggers the workflow on push or pull request events but only for the main branch
   push:
+    paths: 
+      - 'server/**'  # only run actions when backend is updated
     branches: [ master ]
   pull_request:
     branches: [ master ]
