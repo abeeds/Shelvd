@@ -36,7 +36,8 @@ jobs:
       - name: Setup .env
         working-directory: ./server
         run: |
-          echo "MY_TEST=${{ secrets.MY_TEST }}" >> .env
+          echo "CLOUD_STRING=${{ secrets.CLOUD_STRING }}" >> .env
+          echo "CLOUD_MONGO=0" >> .env 
 
       - name: Run Tests
         working-directory: ./server
