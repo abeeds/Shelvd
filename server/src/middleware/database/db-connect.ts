@@ -70,11 +70,10 @@ export async function findOne<T extends Document> (
     if (mongoose.connection.readyState === 1) {
         const my_model = mongoose.model<T>(collection_name, schema);
         let output: { [key: string]: T} = {};
-        let query = my_model.findOne(search_params);
-        let result = await query.exec();
+        let query = await my_model.findOne(search_params);
 
-        if(result !== null) {
-            output = result.toObject();
+        if(query !== null) {
+            output = query.toObject();
         }
 
         return output;
@@ -111,8 +110,7 @@ export async function findMany<T extends Document> (
             .sort(sort)
             .limit(limit)
             .skip(skip)
-            .select(select)
-            .exec();
+            .select(select);
 
         // turn query into an object
         query.forEach(doc => {
