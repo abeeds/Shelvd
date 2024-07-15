@@ -12,8 +12,8 @@ const TEST_PW = 'cdfg'
 
 
 describe('tests', async () => {
-    after(async () => {
-        await mongoose.disconnect();
+    after(() => {
+        mongoose.disconnect();
     });
 
 
