@@ -33,6 +33,11 @@ jobs:
         working-directory: ./server
         run: npm install
 
+      - name: Setup .env
+        working-directory: ./server
+        run: |
+          echo "MY_TEST=${{ secrets.MY_TEST }}" >> .env
+
       # - name: Run Tests
       #   working-directory: ./server
       # run: npm run tests
