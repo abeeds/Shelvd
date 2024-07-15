@@ -3,7 +3,7 @@ import { userSchema } from "./schemas/user";
 
 
 // fields
-const USERS_COLLECT = 'users';
+export const USERS_COLLECT = 'users';
 const EMAIL = 'email';
 const USERNAME = 'username';
 const PASSWORD = 'password';
