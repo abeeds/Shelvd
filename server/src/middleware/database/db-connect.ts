@@ -158,8 +158,8 @@ export async function deleteOne<T extends Document>(
 ) {
     dbConnect();
     if (mongoose.connection.readyState === 1) {
-    const my_model = mongoose.model<T>(collection_name, schema);
-    return await my_model.findOneAndDelete(filter) !== null;
+        const my_model = mongoose.model<T>(collection_name, schema);
+        return await my_model.findOneAndDelete(filter) !== null;
     }
     else {
         logger.error('[deleteOne] Could not delete. DB is disconnected');
