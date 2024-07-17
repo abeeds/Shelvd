@@ -18,8 +18,7 @@ export async function dbConnect() {
         if(process.env.CLOUD_MONGO !== undefined && process.env.CLOUD_MONGO === '1') {
             logger.info('[dbConnect] Connecting to CLOUD database.');
             connection_string = `${process.env.CLOUD_STRING}`;
-        }
-        else {
+        } else {
             if(process.env.CLOUD_MONGO === undefined) {
                 logger.warn('[dbConnect] CLOUD_MONGO not defined in the `.env`.');
             }
@@ -63,14 +62,15 @@ export async function insertOne<T extends Document>(
 export async function findOne<T extends Document> (
     collection_name: string,
     schema: Schema,
-    search_params: Record<string, any>
+    search_params: Record<string, any>,
+    select: string = ''
 ) {
     dbConnect();
 
     if (mongoose.connection.readyState === 1) {
         const my_model = mongoose.model<T>(collection_name, schema);
         let output: { [key: string]: T} = {};
-        let query = await my_model.findOne(search_params);
+        let query = await my_model.findOne(search_params).select(select);
 
         if(query !== null) {
             output = query.toObject();
@@ -139,8 +139,7 @@ export async function updateOne<T extends Document>(
     if (mongoose.connection.readyState === 1) {
         const my_model = mongoose.model<T>(collection_name, schema);
         return await my_model.findOneAndUpdate(filter, update_obj, {new: true}) !== null;
-    }
-    else {
+    } else {
         logger.error('[updateOne] Could not update. DB is disconnected');
         return null;
     }
@@ -160,8 +159,7 @@ export async function deleteOne<T extends Document>(
     if (mongoose.connection.readyState === 1) {
         const my_model = mongoose.model<T>(collection_name, schema);
         return await my_model.findOneAndDelete(filter) !== null;
-    }
-    else {
+    } else {
         logger.error('[deleteOne] Could not delete. DB is disconnected');
         return null;
     }

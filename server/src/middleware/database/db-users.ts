@@ -1,6 +1,7 @@
 import * as argon2 from "argon2";
+import logger from '../../utils/logger';
 require('dotenv').config();
-import { findMany, insertOne, updateOne } from "./db-connect";
+import { findMany, findOne, insertOne, updateOne } from "./db-connect";
 import { userSchema } from "./schemas/user";
 
 
@@ -10,6 +11,7 @@ const EMAIL = 'email';
 const USERNAME = 'username';
 const PASSWORD = 'password';
 const CREATION_DATE = 'creationDate';
+const DISPLAY_FIELDS = `${CREATION_DATE} ${EMAIL} ${USERNAME}`; // used for select on find calls
 
 
 export async function insertUser(email: string, username: string, password: string) {
@@ -34,10 +36,38 @@ export async function insertUser(email: string, username: string, password: stri
     need to add ways to narrow down the search
 */
 export async function getUsers() {
-    const fields = `${CREATION_DATE} ${EMAIL} ${USERNAME}`;
-
     return findMany(
-        USERS_COLLECT, userSchema, {/*empty to skip this param*/}, fields
+        USERS_COLLECT,
+        userSchema,
+        {/*empty to skip this param*/},
+        DISPLAY_FIELDS
+    );
+}
+
+
+// takes email, username, or both to check account info
+// if both are passed, the username is expected to match the email
+export async function doesUserExist(
+    email: string ='',
+    username: string = ''
+) {
+    let search: any = {};
+
+    // no fields provided
+    if(email === '' && username === '') {
+        return null;
+    }
+    if(email !== '') {
+        search.email = email;
+    }
+    if(username !== '') {
+        search.username = username;
+    }
+
+    return findOne(
+        USERS_COLLECT,
+        userSchema,
+        search
     );
 }
 
@@ -61,4 +91,29 @@ export async function updateUsername(
     };
 
     return updateOne(USERS_COLLECT, userSchema, filt, update_obj);
+}
+
+
+// matches password using the given username to identify the account
+// 
+export async function verifyPassword(
+    email: string,
+    username: string,
+    password: string
+) {
+
+    try {
+        const user = await doesUserExist(email, username);
+        if(user !== null && Object.keys(user).length !== 0) {
+            return await argon2.verify(
+                user.password.toString(),
+                password,
+                {secret: Buffer.from(`${process.env.ARGON2_SECRET}`)}
+            );
+        } else {
+            return false;
+        }
+    } catch (err) {
+        logger.error('[verifyPassword]' + err)
+    }
 }
