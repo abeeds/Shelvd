@@ -1,3 +1,5 @@
+import * as argon2 from "argon2";
+require('dotenv').config();
 import { findMany, insertOne, updateOne } from "./db-connect";
 import { userSchema } from "./schemas/user";
 
@@ -11,10 +13,15 @@ const CREATION_DATE = 'creationDate';
 
 
 export async function insertUser(email: string, username: string, password: string) {
+    const hash = await argon2.hash(
+        password,
+        {secret: Buffer.from(`${process.env.ARGON2_SECRET}`)}
+    );
+
     const newUser = {
         email: email,
         username: username,
-        password: password,
+        password: hash,
         creationDate: new Date(),
     }
 

@@ -38,6 +38,7 @@ jobs:
         run: |
           echo "CLOUD_STRING=${{ secrets.CLOUD_STRING }}" >> .env
           echo "CLOUD_MONGO=0" >> .env 
+          echo "CLOUD_STRING=${{ secrets.ARGON2_SECRET }}" >> .env
 
       - name: Run Tests
         working-directory: ./server
