@@ -45,7 +45,7 @@ export async function insertOne<T extends Document>(
     if (mongoose.connection.readyState === 1) {
         const my_model = mongoose.model<T>(collection_name, schema);
         const new_document = new my_model(object);
-        return await new_document.save();
+        return (await new_document.save()).toObject();
     } else {
         logger.error('[insertOne] Could not insert one. DB is disconnected.');
         return null;
