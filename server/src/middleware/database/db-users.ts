@@ -47,7 +47,7 @@ export async function getUsers() {
 
 // takes email, username, or both to check account info
 // if both are passed, the username is expected to match the email
-export async function doesUserExist(
+export async function findUser(
     email: string ='',
     username: string = ''
 ) {
@@ -101,7 +101,7 @@ export async function verifyPassword(
     username: string,
     password: string
 ) {
-    const user = await doesUserExist(email, username);
+    const user = await findUser(email, username);
     if(user !== null && Object.keys(user).length !== 0) {
         return await argon2.verify(
             user.password.toString(),

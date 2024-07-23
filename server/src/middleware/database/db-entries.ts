@@ -8,7 +8,7 @@ export const ENTRY_COLLECT = 'entries';
 
 
 
-export function createEntry(
+export function insertEntry(
     api: string,
     api_id: string,
     img_id: string,
