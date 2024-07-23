@@ -14,6 +14,11 @@ export function createEntry(
     img_id: string,
     name: string,
 ) {
+    const my_entry = findEntry(api, api_id);
+    if(Object.keys(my_entry).length !== 0) {
+        return my_entry;
+    }
+
     const new_entry = {
         api: api,
         api_id: api_id,
@@ -22,4 +27,21 @@ export function createEntry(
     }
 
     return insertOne(ENTRY_COLLECT, entrySchema, new_entry);
+}
+
+
+export async function findEntry(
+    api: string,
+    api_id: string,
+) {
+    const search = {
+        api: api,
+        api_id: api_id,
+    }
+
+    return await findOne(
+        ENTRY_COLLECT,
+        entrySchema,
+        search,
+    )
 }
