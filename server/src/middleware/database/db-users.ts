@@ -101,19 +101,14 @@ export async function verifyPassword(
     username: string,
     password: string
 ) {
-
-    try {
-        const user = await doesUserExist(email, username);
-        if(user !== null && Object.keys(user).length !== 0) {
-            return await argon2.verify(
-                user.password.toString(),
-                password,
-                {secret: Buffer.from(`${process.env.ARGON2_SECRET}`)}
-            );
-        } else {
-            return false;
-        }
-    } catch (err) {
-        logger.error('[verifyPassword]' + err)
+    const user = await doesUserExist(email, username);
+    if(user !== null && Object.keys(user).length !== 0) {
+        return await argon2.verify(
+            user.password.toString(),
+            password,
+            {secret: Buffer.from(`${process.env.ARGON2_SECRET}`)}
+        );
+    } else {
+        return false;
     }
 }
