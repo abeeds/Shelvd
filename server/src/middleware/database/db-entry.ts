@@ -1,5 +1,5 @@
 import logger from '../../utils/logger';
-import { findMany, findOne, insertOne, updateOne } from "./db-connect";
+import { deleteOne, findMany, findOne, insertOne, updateOne } from "./db-connect";
 import { entrySchema } from './schemas/entry';
 require('dotenv').config();
 
@@ -27,6 +27,23 @@ export function createEntry(
     }
 
     return insertOne(ENTRY_COLLECT, entrySchema, new_entry);
+}
+
+
+export async function deleteEntry(
+    api: string,
+    api_id: string,
+) {
+    const search = {
+        api: api,
+        api_id: api_id,
+    }
+
+    return await deleteOne(
+        ENTRY_COLLECT,
+        entrySchema,
+        search
+    )
 }
 
 
