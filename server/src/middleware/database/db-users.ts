@@ -20,7 +20,7 @@ export async function insertUser(email: string, username: string, password: stri
         {secret: Buffer.from(`${process.env.ARGON2_SECRET}`)}
     );
 
-    const newUser = {
+    const new_user = {
         email: email,
         username: username,
         password: hash,
@@ -28,7 +28,7 @@ export async function insertUser(email: string, username: string, password: stri
     }
 
     // returns true or false
-    return insertOne(USERS_COLLECT, userSchema, newUser);
+    return insertOne(USERS_COLLECT, userSchema, new_user);
 }
 
 
