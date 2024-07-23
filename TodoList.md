@@ -27,6 +27,10 @@
 - Custom themes/colors
 - Upload custom cover/poster image
 - Allow exporting data as CSV
+- create a completely local version 
+  - no account creation
+  - image caching?
+  - scripts or executable that handles all installation
 
 # Backend
 - Get relevant API Keys
