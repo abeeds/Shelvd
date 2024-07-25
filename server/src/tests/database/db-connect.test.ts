@@ -13,7 +13,7 @@ const TEST_PW = 'cdfg';
 const MY_MODEL = mongoose.model(USERS_COLLECT, userSchema);
 
 
-describe('tests', async () => {
+describe('db-connect', async () => {
     after(() => {
         mongoose.disconnect();
     });
