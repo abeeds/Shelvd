@@ -29,8 +29,7 @@ describe('db-users', async() => {
     test('insertUser', async () => {
         const filt = {
             'email': TEST_EMAIL,
-            'username': TEST_USRNM,
-            'password': TEST_PW
+            'username': TEST_USRNM
         };
 
         await insertUser(
