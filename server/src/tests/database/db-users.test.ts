@@ -33,7 +33,7 @@ describe('db-users', async() => {
             'password': TEST_PW
         };
 
-        insertUser(
+        await insertUser(
             TEST_EMAIL,
             TEST_USRNM,
             TEST_PW
