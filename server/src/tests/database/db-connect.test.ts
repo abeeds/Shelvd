@@ -10,6 +10,7 @@ const TEST_EMAIL = 'qrst@gmail.com';
 const TEST_USRNM = 'qrst';
 const TEST_NEW_USRNM = 'uvwx'; 
 const TEST_PW = 'cdfg';
+const MY_MODEL = mongoose.model(USERS_COLLECT, userSchema);
 
 
 describe('tests', async () => {
@@ -38,12 +39,12 @@ describe('tests', async () => {
         );
 
         // make sure the insert worked
-        const my_model = mongoose.model(USERS_COLLECT, userSchema);
-        let search = await my_model.findOne(filt);
+        
+        let search = await MY_MODEL.findOne(filt);
         assert(search !== null);
 
         // cleanup
-        await my_model.findOneAndDelete(filt);
+        await MY_MODEL.findOneAndDelete(filt);
     });
 
 
@@ -55,8 +56,8 @@ describe('tests', async () => {
         };
 
         // create the new document
-        const my_model = mongoose.model(USERS_COLLECT, userSchema);
-        const doc = new my_model(filt);
+        const MY_MODEL = mongoose.model(USERS_COLLECT, userSchema);
+        const doc = new MY_MODEL(filt);
         await doc.save();
 
 
@@ -70,11 +71,11 @@ describe('tests', async () => {
         filt['username'] = TEST_NEW_USRNM;
 
         // make sure the update worked
-        let search = await my_model.findOne(filt);
+        let search = await MY_MODEL.findOne(filt);
         assert(search !== null);
 
         // cleanup
-        await my_model.findOneAndDelete(filt);
+        await MY_MODEL.findOneAndDelete(filt);
     });
 
 
@@ -86,8 +87,8 @@ describe('tests', async () => {
         };
 
         // create the new document
-        const my_model = mongoose.model(USERS_COLLECT, userSchema);
-        const doc = new my_model(filt);
+        const MY_MODEL = mongoose.model(USERS_COLLECT, userSchema);
+        const doc = new MY_MODEL(filt);
         await doc.save();
 
         await deleteOne(
@@ -96,7 +97,7 @@ describe('tests', async () => {
             filt
         );
 
-        let search = await my_model.findOne(filt);
+        let search = await MY_MODEL.findOne(filt);
         assert(search === null);
     })
 });
