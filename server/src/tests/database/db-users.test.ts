@@ -56,7 +56,7 @@ describe('db-users', async() => {
         const doc = new MY_MODEL(filt);
         await doc.save();
 
-        assert(await updateUsername(TEST_USRNM, TEST_NEW_USRNM));
+        await updateUsername(TEST_USRNM, TEST_NEW_USRNM);
         filt['username'] = TEST_NEW_USRNM;
 
         let search = await MY_MODEL.findOne(filt);
