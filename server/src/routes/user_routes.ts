@@ -1,5 +1,5 @@
 import { Express, Request, Response } from "express";
-import { doesUserExist, getUsers, insertUser, verifyPassword } from "../middleware/database/db-users";
+import { findUser, getUsers, insertUser, updateUsername, verifyPassword } from "../middleware/database/db-users";
 import logger from "../utils/logger";
 
 
@@ -44,6 +44,18 @@ function userRoutes(app: Express) {
 
             res.status(500).send();
         };
+    })
+
+    // unsecure
+    app.put('/test/user', async (req: Request, res: Response) => {
+        logger.info(`[${req.socket.remoteAddress}] [PUT] [/test/user]`);
+        const username: string = req.body.username;
+        const new_username: string = req.body.new_username;
+
+        if(await updateUsername(username, new_username)) {
+            res.status(200).send();
+        }
+        res.status(500).send();
     })
 
     // expects either username or email and password

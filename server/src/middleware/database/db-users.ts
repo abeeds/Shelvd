@@ -83,11 +83,11 @@ export async function updateUsername(
     new_username: string
 ) {
     const filt = {
-        USERNAME: old_username
+        username: old_username
     };
 
     const update_obj = {
-        USERNAME: new_username
+        username: new_username
     };
 
     return updateOne(USERS_COLLECT, userSchema, filt, update_obj);

@@ -8,9 +8,9 @@ import { insertUser, updateUsername } from "../../middleware/database/db-users";
 import { USERS_COLLECT } from "../../middleware/database/db-users";
 
 
-const TEST_EMAIL = 'qrst@gmail.com';
-const TEST_USRNM = 'qrst';
-const TEST_NEW_USRNM = 'uvwx'; 
+const TEST_EMAIL = 'tuvw@gmail.com';
+const TEST_USRNM = 'tuvw';
+const TEST_NEW_USRNM = 'hasjdhakljs'; 
 const TEST_PW = 'cdfg';
 const MY_MODEL = mongoose.model(USERS_COLLECT, userSchema);
 
@@ -56,7 +56,7 @@ describe('db-users', async() => {
         const doc = new MY_MODEL(filt);
         await doc.save();
 
-        await updateUsername(TEST_USRNM, TEST_NEW_USRNM);
+        console.log(await updateUsername(TEST_USRNM, TEST_NEW_USRNM));
         filt['username'] = TEST_NEW_USRNM;
 
         let search = await MY_MODEL.findOne(filt);
