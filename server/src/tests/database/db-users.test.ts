@@ -1,6 +1,7 @@
 import assert from "node:assert";
 import test from "node:test";
 import mongoose from "mongoose";
+import * as argon2 from "argon2";
 import { after, before, describe } from "node:test";
 import { dbConnect } from "../../middleware/database/db-connect";
 import { userSchema } from "../../middleware/database/schemas/user";
@@ -66,10 +67,15 @@ describe('db-users', async() => {
 
 
     test('verifyPassword', async () => {
+        const hash = await argon2.hash(
+            TEST_PW,
+            {secret: Buffer.from(`${process.env.ARGON2_SECRET}`)}
+        );
+
         let filt = {
             'email': TEST_EMAIL,
             'username': TEST_USRNM,
-            'password': TEST_PW
+            'password': hash
         };
 
         // create the new document
@@ -78,5 +84,6 @@ describe('db-users', async() => {
         await doc.save();
 
         assert(await verifyPassword(TEST_EMAIL, TEST_USRNM, TEST_PW));
+        await MY_MODEL.findOneAndDelete(filt);
     });
 })
