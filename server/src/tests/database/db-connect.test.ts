@@ -56,7 +56,6 @@ describe('db-connect', async () => {
         };
 
         // create the new document
-        const MY_MODEL = mongoose.model(USERS_COLLECT, userSchema);
         const doc = new MY_MODEL(filt);
         await doc.save();
 
@@ -87,7 +86,6 @@ describe('db-connect', async () => {
         };
 
         // create the new document
-        const MY_MODEL = mongoose.model(USERS_COLLECT, userSchema);
         const doc = new MY_MODEL(filt);
         await doc.save();
 
