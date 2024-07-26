@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { after, before, describe } from "node:test";
 import { dbConnect } from "../../middleware/database/db-connect";
 import { userSchema } from "../../middleware/database/schemas/user";
-import { insertUser } from "../../middleware/database/db-users";
+import { insertUser, updateUsername } from "../../middleware/database/db-users";
 import { USERS_COLLECT } from "../../middleware/database/db-users";
 
 
@@ -23,7 +23,7 @@ describe('db-users', async() => {
 
     after(() => {
         mongoose.disconnect();
-    })
+    });
 
 
     test('insertUser', async () => {
@@ -40,5 +40,18 @@ describe('db-users', async() => {
 
         let search = await MY_MODEL.findOne(filt);
         assert(search !== null);
-    })
+    });
+
+
+    test('updateUsername', async () => {
+        const filt = {
+            'email': TEST_EMAIL,
+            'username': TEST_NEW_USRNM
+        };
+
+        assert(await updateUsername(TEST_USRNM, TEST_NEW_USRNM));
+
+        let search = await MY_MODEL.findOne(filt);
+        assert(search !== null);
+    });
 })
