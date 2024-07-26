@@ -40,18 +40,27 @@ describe('db-users', async() => {
 
         let search = await MY_MODEL.findOne(filt);
         assert(search !== null);
+        await MY_MODEL.findOneAndDelete(filt);
     });
 
 
     test('updateUsername', async () => {
-        const filt = {
+        let filt = {
             'email': TEST_EMAIL,
-            'username': TEST_NEW_USRNM
+            'username': TEST_USRNM,
+            'password': TEST_PW
         };
 
+        // create the new document
+        const MY_MODEL = mongoose.model(USERS_COLLECT, userSchema);
+        const doc = new MY_MODEL(filt);
+        await doc.save();
+
         assert(await updateUsername(TEST_USRNM, TEST_NEW_USRNM));
+        filt['username'] = TEST_NEW_USRNM;
 
         let search = await MY_MODEL.findOne(filt);
         assert(search !== null);
+        await MY_MODEL.findOneAndDelete(filt);
     });
 })
