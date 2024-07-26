@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { after, before, describe } from "node:test";
 import { dbConnect } from "../../middleware/database/db-connect";
 import { userSchema } from "../../middleware/database/schemas/user";
-import { insertUser, updateUsername } from "../../middleware/database/db-users";
+import { insertUser, updateUsername, verifyPassword } from "../../middleware/database/db-users";
 import { USERS_COLLECT } from "../../middleware/database/db-users";
 
 
@@ -62,5 +62,21 @@ describe('db-users', async() => {
         let search = await MY_MODEL.findOne(filt);
         assert(search !== null);
         await MY_MODEL.findOneAndDelete(filt);
+    });
+
+
+    test('verifyPassword', async () => {
+        let filt = {
+            'email': TEST_EMAIL,
+            'username': TEST_USRNM,
+            'password': TEST_PW
+        };
+
+        // create the new document
+        const MY_MODEL = mongoose.model(USERS_COLLECT, userSchema);
+        const doc = new MY_MODEL(filt);
+        await doc.save();
+
+        assert(await verifyPassword(TEST_EMAIL, TEST_USRNM, TEST_PW));
     });
 })
