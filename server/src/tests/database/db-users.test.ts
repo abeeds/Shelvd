@@ -7,6 +7,7 @@ import { dbConnect } from "../../middleware/database/db-connect";
 import { userSchema } from "../../middleware/database/schemas/user";
 import { insertUser, updateUsername, verifyPassword } from "../../middleware/database/db-users";
 import { USERS_COLLECT } from "../../middleware/database/db-users";
+require('dotenv').config();
 
 
 const TEST_EMAIL = 'tuvw@gmail.com';
