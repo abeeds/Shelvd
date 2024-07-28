@@ -1,4 +1,5 @@
-import { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
+import { SHELF_COLLECT } from "../db-shelves";
 
 
 interface shelf extends Document {
@@ -20,6 +21,13 @@ export const shelfSchema = new Schema<shelf>({
 
 
 shelfSchema.index({
-    owner: 1,
-    name: 1
-});
+        owner: 1,
+        name: 1
+    }, {
+        unique: true
+    }
+);
+
+
+const SHELF_MODEL = mongoose.model(SHELF_COLLECT, shelfSchema);
+export default SHELF_MODEL;

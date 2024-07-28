@@ -1,4 +1,5 @@
-import { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
+import { USERS_COLLECT } from "../db-users";
 
 
 interface user extends Document {
@@ -14,3 +15,7 @@ export const userSchema = new Schema<user>({
     password: { type: String, required: true },
     creationDate: { type: Date, default: Date.now },
 });
+
+
+const USER_MODEL = mongoose.model(USERS_COLLECT, userSchema);
+export default USER_MODEL;
