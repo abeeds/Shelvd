@@ -1,5 +1,4 @@
 import { Schema, Document } from "mongoose";
-import { StringValidation } from "zod";
 
 
 interface entry extends Document {
@@ -15,3 +14,12 @@ export const entrySchema = new Schema<entry>({
     img_id: { type: String, required: true },
     name: { type: String, required: true},
 })
+
+
+entrySchema.index({
+        api: 1,
+        api_id: 1
+    } , {
+        unique: true
+    }
+);
