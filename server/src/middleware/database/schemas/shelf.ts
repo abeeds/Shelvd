@@ -17,3 +17,9 @@ export const shelfSchema = new Schema<shelf>({
     creationDate: { type: Date, default: Date.now },
     parent: { type: String }
 });
+
+
+shelfSchema.index({
+    owner: 1,
+    name: 1
+});
