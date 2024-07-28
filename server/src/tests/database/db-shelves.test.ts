@@ -1,7 +1,6 @@
 import assert from "node:assert";
 import test from "node:test";
-import mongoose, { mongo } from "mongoose";
-import * as argon2 from "argon2";
+import mongoose from "mongoose";
 import { after, before, describe } from "node:test";
 import { dbConnect } from "../../middleware/database/db-connect";
 import { insertShelf, SHELF_COLLECT } from "../../middleware/database/db-shelves";
