@@ -1,6 +1,6 @@
 import * as argon2 from "argon2";
 import logger from '../../utils/logger';
-import { findMany, findOne, insertOne, updateOne } from "./db-connect";
+import { deleteOne, findMany, findOne, insertOne, updateOne } from "./db-connect";
 import { shelfSchema } from "./schemas/shelf";
 require('dotenv').config();
 
@@ -25,5 +25,23 @@ export async function insertShelf(
         SHELF_COLLECT,
         shelfSchema,
         new_shelf
+    )
+}
+
+
+export async function deleteShelf(
+    owner: string,
+    name: string
+) {
+    // TODO: set parent of sub shelves to the parent of the specified shelf
+    const search = {
+        owner: owner,
+        name: name
+    }
+
+    return await deleteOne(
+        SHELF_COLLECT,
+        shelfSchema,
+        search
     )
 }

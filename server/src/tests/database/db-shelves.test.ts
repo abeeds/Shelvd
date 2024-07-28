@@ -3,7 +3,7 @@ import test from "node:test";
 import mongoose from "mongoose";
 import { after, before, describe } from "node:test";
 import { dbConnect } from "../../middleware/database/db-connect";
-import { insertShelf, SHELF_COLLECT } from "../../middleware/database/db-shelves";
+import { deleteShelf, insertShelf, SHELF_COLLECT } from "../../middleware/database/db-shelves";
 import { shelfSchema } from "../../middleware/database/schemas/shelf";
 
 
@@ -40,5 +40,22 @@ describe('db-shelves', async() => {
         let search = await SHELF_MODEL.findOne(filt);
         assert(search !== null);
         await SHELF_MODEL.findOneAndDelete(filt);
+    });
+
+
+    test('deleteShelf', async () => {
+        const filt = {
+            owner: TEST_OWNER,
+            name: TEST_NAME,
+            description: TEST_DESCRIPTION
+        }
+
+        const doc = new SHELF_MODEL(filt);
+        await doc.save();
+
+        await deleteShelf(TEST_OWNER, TEST_NAME);
+
+        let search = await SHELF_MODEL.findOne(filt);
+        assert(search === null);
     });
 });
