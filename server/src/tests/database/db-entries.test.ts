@@ -5,7 +5,6 @@ import { after, before, describe } from "node:test";
 import { dbConnect } from "../../middleware/database/db-connect";
 import { deleteEntry, ENTRY_COLLECT, insertEntry } from "../../middleware/database/db-entries";
 import { entrySchema } from "../../middleware/database/schemas/entry";
-require('dotenv').config();
 
 
 const ENTRY_MODEL = mongoose.model(ENTRY_COLLECT, entrySchema);

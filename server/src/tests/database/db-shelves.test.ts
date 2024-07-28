@@ -5,7 +5,6 @@ import { after, before, describe } from "node:test";
 import { dbConnect } from "../../middleware/database/db-connect";
 import { insertShelf, SHELF_COLLECT } from "../../middleware/database/db-shelves";
 import { shelfSchema } from "../../middleware/database/schemas/shelf";
-require('dotenv').config();
 
 
 const SHELF_MODEL = mongoose.model(SHELF_COLLECT, shelfSchema);
