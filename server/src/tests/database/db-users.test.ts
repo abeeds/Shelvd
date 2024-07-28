@@ -14,7 +14,7 @@ const TEST_EMAIL = 'tuvw@gmail.com';
 const TEST_USRNM = 'tuvw';
 const TEST_NEW_USRNM = 'hasjdhakljs'; 
 const TEST_PW = 'cdfg';
-const MY_MODEL = mongoose.model(USERS_COLLECT, userSchema);
+const USER_MODEL = mongoose.model(USERS_COLLECT, userSchema);
 
 
 describe('db-users', async() => {
@@ -40,9 +40,9 @@ describe('db-users', async() => {
             TEST_PW
         );
 
-        let search = await MY_MODEL.findOne(filt);
+        let search = await USER_MODEL.findOne(filt);
         assert(search !== null);
-        await MY_MODEL.findOneAndDelete(filt);
+        await USER_MODEL.findOneAndDelete(filt);
     });
 
 
@@ -54,15 +54,15 @@ describe('db-users', async() => {
         };
 
         // create the new document
-        const doc = new MY_MODEL(filt);
+        const doc = new USER_MODEL(filt);
         await doc.save();
 
         console.log(await updateUsername(TEST_USRNM, TEST_NEW_USRNM));
         filt['username'] = TEST_NEW_USRNM;
 
-        let search = await MY_MODEL.findOne(filt);
+        let search = await USER_MODEL.findOne(filt);
         assert(search !== null);
-        await MY_MODEL.findOneAndDelete(filt);
+        await USER_MODEL.findOneAndDelete(filt);
     });
 
 
@@ -79,10 +79,10 @@ describe('db-users', async() => {
         };
 
         // create the new document
-        const doc = new MY_MODEL(filt);
+        const doc = new USER_MODEL(filt);
         await doc.save();
 
         assert(await verifyPassword(TEST_EMAIL, TEST_USRNM, TEST_PW));
-        await MY_MODEL.findOneAndDelete(filt);
+        await USER_MODEL.findOneAndDelete(filt);
     });
 })
