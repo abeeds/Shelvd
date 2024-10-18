@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { initDB, closeDB } from './db/db';
+import { initDB } from './db/db';
 
 @Component({
     selector: 'app-root',

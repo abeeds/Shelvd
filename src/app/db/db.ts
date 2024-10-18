@@ -2,11 +2,11 @@ const sqlite3 = require('sqlite3').verbose();
 
 
 // Table names and attributes
-const ENTRY = "Entry";
-const ENTRYID = "entryID";
-const ENTRYNAME = "entryNAME";
-const ENTRYIMAGE = "entryImage"; // url to image
-const ENTRYTYPE = "entryType"; // direct to another table
+const ITEM = "Item";
+const ITEMID = "itemID";
+const ITEMNAME = "itemNAME";
+const ITEMIMAGE = "itemImage"; // url to image
+const ITEMTYPE = "itemType"; // direct to another table
 
 const SHELF = "Shelf";
 const SHELFID = "shelfID";
@@ -19,6 +19,10 @@ const CHILDID = "childID";
 
 const SHELFITEM = "ShelfItem"; // shelfID and parentID
 
+const TYPE = "Type"; // table for different item types
+const TYPEID = "typeID";
+const TYPENAME = "typeName";
+
 
 export function numTables(db: any): Promise<number> {
     return new Promise((resolve) => {
@@ -30,10 +34,6 @@ export function numTables(db: any): Promise<number> {
             resolve(count);
         });
     });
-}
-
-export function closeDB(db: any) {
-    db.close();
 }
 
 
@@ -55,10 +55,32 @@ export function initTables(db: any) {
         ${SHELFDESC} TEXT,
         PRIMARY KEY (${SHELFID})`
     );
-    createTable(db, SUBSHELF, 
+    createTable(db, TYPE,
+        `${TYPEID} int,
+        ${TYPENAME} varchar(255),
+        PRIMARY KEY (${TYPEID})`
+    )
+    createTable(db, ITEM,
+        `${ITEMID} int,
+        ${ITEMNAME} TEXT,
+        ${ITEMIMAGE} TEXT,
+        ${ITEMTYPE} int,
+        PRIMARY KEY (${ITEMID}),
+        FOREIGN KEY (${ITEMTYPE}) REFERENCES ${TYPE}(${TYPEID})`
+    );
+    createTable(db, SUBSHELF,
         `${PARENTID} int,
         ${CHILDID} int,
-        PRIMARY KEY (${PARENTID}, ${CHILDID})`
+        PRIMARY KEY (${PARENTID}, ${CHILDID}),
+        FOREIGN KEY (${PARENTID}) REFERENCES ${SHELF}(${SHELFID}),
+        FOREIGN KEY (${CHILDID}) REFERENCES ${SHELF}(${SHELFID})`
+    );
+    createTable(db, SHELFITEM,
+        `${SHELFID} int,
+        ${ITEMID} int,
+        PRIMARY KEY (${SHELFID}, ${ITEMID}),
+        FOREIGN KEY (${SHELFID}) REFERENCES ${SHELF}(${SHELFID}),
+        FOREIGN KEY (${ITEMID}) REFERENCES ${ITEM}(${ITEMID})`
     );
 }
 
@@ -73,7 +95,7 @@ export function initDB() {
         if(res == 0) {
             initTables(db);
         }
-    })
+    });
 
     return db;
 }
