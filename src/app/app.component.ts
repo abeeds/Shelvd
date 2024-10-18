@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { initDB, getTables, closeDB } from './db/db';
+import { initDB, closeDB } from './db/db';
 
 @Component({
     selector: 'app-root',
@@ -15,7 +15,5 @@ export class AppComponent {
 
     async ngOnInit() {
         const db = initDB();
-        getTables(db);
-        closeDB(db);
     }
 }
