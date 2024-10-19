@@ -1,6 +1,9 @@
 const sqlite3 = require('sqlite3').verbose();
 
 
+export let DB: any;
+
+
 // Table names and attributes
 const ITEM = "Item";
 const ITEMID = "itemID";
@@ -87,15 +90,15 @@ export function initTables(db: any) {
 
 // initializes and returns the database
 export function initDB() {
-    const db = new sqlite3.Database("public/shelvd.sqlite");
+    DB = new sqlite3.Database("public/shelvd.sqlite");
 
     // initialize tables if there aren't any
-    let ntables = numTables(db);
+    let ntables = numTables(DB);
     ntables.then((res) => {
         if(res == 0) {
-            initTables(db);
+            initTables(DB);
         }
     });
 
-    return db;
+    return DB;
 }

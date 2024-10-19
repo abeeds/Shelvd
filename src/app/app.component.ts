@@ -13,7 +13,7 @@ import { initDB } from './db/db';
 export class AppComponent {
     title = 'shelvd';
 
-    async ngOnInit() {
+    ngOnInit() {
         const db = initDB();
     }
 }

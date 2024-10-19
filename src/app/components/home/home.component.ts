@@ -20,7 +20,6 @@ import { CommonModule } from '@angular/common';
         </table>
     `,
     styleUrl: './home.component.css'
-})
-export class HomeComponent {
+}) export class HomeComponent {
     myLst = [["test", "movie", "hello"]]
 }
