@@ -27,11 +27,11 @@ const TYPEID = "typeID";
 const TYPENAME = "typeName";
 
 
-export function numTables(db: any): Promise<number> {
+export function numTables(): Promise<number> {
     return new Promise((resolve) => {
         let count = 0;
 
-        db.each("SELECT name FROM sqlite_master WHERE type='table'", (err: any, row: any) => {
+        DB.each("SELECT name FROM sqlite_master WHERE type='table'", (err: any, row: any) => {
             count += 1;
         }, () => {
             resolve(count);
@@ -43,27 +43,32 @@ export function numTables(db: any): Promise<number> {
 // column should be comma separated values that you would 
 // write in the parenthesis of a create table query
 // ex: column = "id int, name varchar(255)";
-export function createTable(db: any, name: string, column: string) {
+export function createTable(name: string, column: string) {
     name = name.replace(/"/g, '""');    // handle quotations in the name
     let query: string = `CREATE TABLE "${name}" (${column})`;
-    db.run(query);
+    DB.run(query);
+}
+
+
+export function getColumns(table_name: string) {
+
 }
 
 
 // creates the tables required for this app to work
-export function initTables(db: any) {
-    createTable(db, SHELF,
+export function initTables() {
+    createTable(SHELF,
         `${SHELFID} int,
         ${SHELFNAME} varchar(255),
         ${SHELFDESC} TEXT,
         PRIMARY KEY (${SHELFID})`
     );
-    createTable(db, TYPE,
+    createTable(TYPE,
         `${TYPEID} int,
         ${TYPENAME} varchar(255),
         PRIMARY KEY (${TYPEID})`
     )
-    createTable(db, ITEM,
+    createTable(ITEM,
         `${ITEMID} int,
         ${ITEMNAME} TEXT,
         ${ITEMIMAGE} TEXT,
@@ -71,14 +76,14 @@ export function initTables(db: any) {
         PRIMARY KEY (${ITEMID}),
         FOREIGN KEY (${ITEMTYPE}) REFERENCES ${TYPE}(${TYPEID})`
     );
-    createTable(db, SUBSHELF,
+    createTable(SUBSHELF,
         `${PARENTID} int,
         ${CHILDID} int,
         PRIMARY KEY (${PARENTID}, ${CHILDID}),
         FOREIGN KEY (${PARENTID}) REFERENCES ${SHELF}(${SHELFID}),
         FOREIGN KEY (${CHILDID}) REFERENCES ${SHELF}(${SHELFID})`
     );
-    createTable(db, SHELFITEM,
+    createTable(SHELFITEM,
         `${SHELFID} int,
         ${ITEMID} int,
         PRIMARY KEY (${SHELFID}, ${ITEMID}),
@@ -93,10 +98,10 @@ export function initDB() {
     DB = new sqlite3.Database("public/shelvd.sqlite");
 
     // initialize tables if there aren't any
-    let ntables = numTables(DB);
+    let ntables = numTables();
     ntables.then((res) => {
         if(res == 0) {
-            initTables(DB);
+            initTables();
         }
     });
 
