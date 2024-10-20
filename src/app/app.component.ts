@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
-import { initDB } from './db/db';
+import { getColumns, initDB } from './db/db';
 
 @Component({
     selector: 'app-root',
@@ -14,6 +14,6 @@ export class AppComponent {
     title = 'shelvd';
 
     ngOnInit() {
-        const db = initDB();
+        initDB();
     }
 }

@@ -50,8 +50,19 @@ export function createTable(name: string, column: string) {
 }
 
 
-export function getColumns(table_name: string) {
+export function getColumns(table_name: string): Promise<any[]> {
+    const query = `PRAGMA table_info(${table_name})`;
+    let res: any[] = [];
 
+    return new Promise((resolve) => {
+        DB.all(query, (err: any, rows: any[]) => {
+            rows.forEach(row => {
+                res.push(row.name);
+            });
+
+            resolve(res);
+        });
+    });
 }
 
 
@@ -104,6 +115,4 @@ export function initDB() {
             initTables();
         }
     });
-
-    return DB;
 }
