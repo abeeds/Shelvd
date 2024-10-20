@@ -9,28 +9,27 @@ import { DB, getColumns, initDB } from '../../db/db';
     templateUrl: `./dev.component.html`,
     styleUrl: `./dev.component.css`
 }) export class DevComponent {
-    table: Map<string, any[][]>;
+    colls: Map<string, string[]>;
+    rows: Map<string, any[][]>;
     // hash map with table names as keys
-    // values are list of lists
-    // index 0 -> names of collumns
-    // each subsequent index is a row on the table
+    // each index in the list is a row on the table
 
     constructor() {
-        this.table = new Map<string, any[][]>
+        this.rows = new Map<string, any[][]>
+        this.colls = new Map<string, string[]>
     }
 
     ngOnInit() {
-        let tableNames: string[] = [];
         DB.serialize(() => {
             DB.each("SELECT name FROM sqlite_master WHERE type='table'", (err: any, row: any) => {
-                tableNames.push(row.name);
+                getColumns(row.name).then((res) => {
+                    this.colls.set(row.name, res);
+                    console.log(this.colls);
+                });
+
+                // fetch data in this table
             });
             
-            for (let i = 0; i < tableNames.length; i++) {
-                getColumns(tableNames[i]).then((res) => {
-                    this.table.set(tableNames[i], [res]);
-                })
-            }
         })
     }
 }
