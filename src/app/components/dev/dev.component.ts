@@ -21,9 +21,9 @@ import { DB, getColumns, initDB } from '../../db/db';
 
     ngOnInit() {
         DB.serialize(() => {
-            DB.each("SELECT name FROM sqlite_master WHERE type='table'", (err: any, row: any) => {
-                getColumns(row.name).then((res) => {
-                    this.colls.set(row.name, res);
+            DB.each("SELECT name FROM sqlite_master WHERE type='table'", (err: any, table: any) => {
+                getColumns(table.name).then((res) => {
+                    this.colls.set(table.name, res);
                     console.log(this.colls);
                 });
 
