@@ -45,7 +45,7 @@ export function numTables(): Promise<number> {
 // ex: column = "id int, name varchar(255)";
 export function createTable(name: string, column: string) {
     name = name.replace(/"/g, '""');    // handle quotations in the name
-    let query: string = `CREATE TABLE "${name}" (${column})`;
+    let query: string = `CREATE TABLE ${name} (${column})`;
     DB.run(query);
 }
 

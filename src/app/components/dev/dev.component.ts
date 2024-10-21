@@ -10,8 +10,6 @@ import { DB, getColumns, initDB } from '../../db/db';
     styleUrl: `./dev.component.css`
 }) export class DevComponent {
     rows: Map<string, any[]>;
-    // hash map with table names as keys
-    // each index in the list is a row on the table
 
     constructor() {
         this.rows = new Map<string, any[]>
@@ -25,7 +23,7 @@ import { DB, getColumns, initDB } from '../../db/db';
             }, () => {
                 this.rows.set(table, all_rows);
             });
-        }, () => {
+
             console.log(this.rows);
         });
 
