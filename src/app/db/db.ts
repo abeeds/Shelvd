@@ -26,6 +26,11 @@ const TYPE = "Type"; // table for different item types
 const TYPEID = "typeID";
 const TYPENAME = "typeName";
 
+const TABLECOUNTS = "TableCounts";
+const TCTABLENAME = "tcTableName";
+const TCROWCOUNT = "tcRowCount";
+const TCLASTID = "tcLastUsedID";
+
 
 export function numTables(): Promise<number> {
     return new Promise((resolve) => {
@@ -100,6 +105,12 @@ export function initTables() {
         PRIMARY KEY (${SHELFID}, ${ITEMID}),
         FOREIGN KEY (${SHELFID}) REFERENCES ${SHELF}(${SHELFID}),
         FOREIGN KEY (${ITEMID}) REFERENCES ${ITEM}(${ITEMID})`
+    );
+    createTable(TABLECOUNTS,
+        `${TCTABLENAME} varchar(255),
+        ${TCROWCOUNT} int,
+        ${TCLASTID} int,
+        PRIMARY KEY (${TCTABLENAME})`
     );
 }
 
