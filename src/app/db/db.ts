@@ -27,8 +27,12 @@ const TYPEID = "type_id";
 const TYPENAME = "type_name";
 
 const TABLECOUNT = "TableCount";
-const TCTABLENAME = "tc_table_name";
-const TCROWCOUNT = "tc_row_count";
+const TCTABLENAME = "table_name";
+const TCROWCOUNT = "row_count";
+
+const SHELFCOUNT = 'ShelfCount';
+// shelf id
+const SHELFROWS = 'shelf_rows';
 
 
 export function numTables(): Promise<number> {
@@ -46,7 +50,7 @@ export function numTables(): Promise<number> {
 
 // column should be comma separated values that you would 
 // write in the parenthesis of a create table query
-// ex: column = "id int, name varchar(255)";
+// ex: column = "id INTEGER, name varchar(255)";
 export function createTable(name: string, column: string) {
     name = name.replace(/"/g, '""');    // handle quotations in the name
     let query: string = `CREATE TABLE ${name} (${column})`;
@@ -80,44 +84,49 @@ export function getColumns(table_name: string): Promise<any[]> {
 }
 
 
-// creates the tables required for this app to work
+// creates the tables and triggers required for this app to work
 export function initTables() {
     // add a row into TC for each of these
     DB.serialize(() => {
         createTable(TABLECOUNT,
             `${TCTABLENAME} varchar(255),
-            ${TCROWCOUNT} int,
+            ${TCROWCOUNT} INTEGER,
             PRIMARY KEY (${TCTABLENAME})`
         );
         createTable(SHELF,
-            `${SHELFID} int PRIMARY KEY AUTOINCREMENT,
+            `${SHELFID} INTEGER PRIMARY KEY AUTOINCREMENT,
             ${SHELFNAME} varchar(255),
             ${SHELFDESC} TEXT`
         );
         createTable(TYPE,
-            `${TYPEID} int PRIMARY KEY AUTOINCREMENT,
+            `${TYPEID} INTEGER PRIMARY KEY AUTOINCREMENT,
             ${TYPENAME} varchar(255)`
         )
         createTable(ITEM,
-            `${ITEMID} int PRIMARY KEY AUTOINCREMENT,
+            `${ITEMID} INTEGER PRIMARY KEY AUTOINCREMENT,
             ${ITEMNAME} TEXT,
             ${ITEMIMAGE} TEXT,
-            ${ITEMTYPE} int,
+            ${ITEMTYPE} INTEGER,
             FOREIGN KEY (${ITEMTYPE}) REFERENCES ${TYPE}(${TYPEID})`
         );
         createTable(SUBSHELF,
-            `${PARENTID} int,
-            ${CHILDID} int,
+            `${PARENTID} INTEGER,
+            ${CHILDID} INTEGER,
             PRIMARY KEY (${PARENTID}, ${CHILDID}),
             FOREIGN KEY (${PARENTID}) REFERENCES ${SHELF}(${SHELFID}),
             FOREIGN KEY (${CHILDID}) REFERENCES ${SHELF}(${SHELFID})`
         );
         createTable(SHELFITEM,
-            `${SHELFID} int,
-            ${ITEMID} int,
+            `${SHELFID} INTEGER,
+            ${ITEMID} INTEGER,
             PRIMARY KEY (${SHELFID}, ${ITEMID}),
             FOREIGN KEY (${SHELFID}) REFERENCES ${SHELF}(${SHELFID}),
             FOREIGN KEY (${ITEMID}) REFERENCES ${ITEM}(${ITEMID})`
+        );
+        createTable(SHELFCOUNT, `
+            ${SHELFID} INTEGER PRIMARY KEY,
+            ${SHELFROWS} INTEGER,
+            FOREIGN KEY (${SHELFID}) REFERENCES ${SHELF}(${SHELFID})`
         );
 
         // update row counts for each table after insert or delete
@@ -142,7 +151,26 @@ export function initTables() {
                     WHERE ${TCTABLENAME} = '${table}';
                 END;`
             );
-        }
+        };
+
+        DB.run(`
+            CREATE TRIGGER insert_shelf
+            AFTER INSERT ON ${SHELF}
+            BEGIN
+                INSERT INTO ${SHELFCOUNT}
+                VALUES (NEW.${SHELFID}, 0);
+            END;`
+        );
+
+        // TODO: this still needs to delete any relevant rows form SHELFITEMS
+        DB.run(`
+            CREATE TRIGGER delete_shelf
+            AFTER DELETE ON ${SHELF}
+            BEGIN
+                DELETE FROM ${SHELFCOUNT}
+                WHERE ${SHELFID} = OLD.${SHELFID};
+            END;`
+        );
     });
 }
 
@@ -153,8 +181,8 @@ export function initDB() {
 
     // initialize tables if there aren't any
     let ntables = numTables();
-    ntables.then((res) => {
-        if(res == 0) {
+    ntables.then((table_count) => {
+        if(table_count == 0) {
             initTables();
         }
     });

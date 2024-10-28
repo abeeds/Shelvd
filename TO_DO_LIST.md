@@ -1,8 +1,5 @@
 - DB
-    - create table that tracks number of items per shelf
-        - should have a trigger that does it automatically on insert or delete
     - need to automate it for whenever a new table is created
-        - createTable should also create the trigger
     - fail safes
         - check if a table exists before trying to create it in createTable
 - Front end
