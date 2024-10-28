@@ -86,7 +86,6 @@ export function getColumns(table_name: string): Promise<any[]> {
 
 // creates the tables and triggers required for this app to work
 export function initTables() {
-    // add a row into TC for each of these
     DB.serialize(() => {
         createTable(TABLECOUNT,
             `${TCTABLENAME} varchar(255),
@@ -153,6 +152,7 @@ export function initTables() {
             );
         };
 
+        // manage data associated with a shelf
         DB.run(`
             CREATE TRIGGER insert_shelf
             AFTER INSERT ON ${SHELF}
@@ -161,7 +161,6 @@ export function initTables() {
                 VALUES (NEW.${SHELFID}, 0);
             END;`
         );
-
         DB.run(`
             CREATE TRIGGER delete_shelf
             AFTER DELETE ON ${SHELF}
