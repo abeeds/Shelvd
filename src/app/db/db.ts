@@ -162,12 +162,14 @@ export function initTables() {
             END;`
         );
 
-        // TODO: this still needs to delete any relevant rows form SHELFITEMS
         DB.run(`
             CREATE TRIGGER delete_shelf
             AFTER DELETE ON ${SHELF}
             BEGIN
                 DELETE FROM ${SHELFCOUNT}
+                WHERE ${SHELFID} = OLD.${SHELFID};
+
+                DELETE FROM ${SHELFITEM}
                 WHERE ${SHELFID} = OLD.${SHELFID};
             END;`
         );
