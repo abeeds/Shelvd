@@ -29,7 +29,6 @@ const TYPENAME = "type_name";
 const TABLECOUNT = "TableCount";
 const TCTABLENAME = "tc_table_name";
 const TCROWCOUNT = "tc_row_count";
-const TCLASTID = "tc_last_id";
 
 
 export function numTables(): Promise<number> {
@@ -88,26 +87,22 @@ export function initTables() {
         createTable(TABLECOUNT,
             `${TCTABLENAME} varchar(255),
             ${TCROWCOUNT} int,
-            ${TCLASTID} int,
             PRIMARY KEY (${TCTABLENAME})`
         );
         createTable(SHELF,
-            `${SHELFID} int,
+            `${SHELFID} int PRIMARY KEY AUTOINCREMENT,
             ${SHELFNAME} varchar(255),
-            ${SHELFDESC} TEXT,
-            PRIMARY KEY (${SHELFID})`
+            ${SHELFDESC} TEXT`
         );
         createTable(TYPE,
-            `${TYPEID} int,
-            ${TYPENAME} varchar(255),
-            PRIMARY KEY (${TYPEID})`
+            `${TYPEID} int PRIMARY KEY AUTOINCREMENT,
+            ${TYPENAME} varchar(255)`
         )
         createTable(ITEM,
-            `${ITEMID} int,
+            `${ITEMID} int PRIMARY KEY AUTOINCREMENT,
             ${ITEMNAME} TEXT,
             ${ITEMIMAGE} TEXT,
             ${ITEMTYPE} int,
-            PRIMARY KEY (${ITEMID}),
             FOREIGN KEY (${ITEMTYPE}) REFERENCES ${TYPE}(${TYPEID})`
         );
         createTable(SUBSHELF,
@@ -124,6 +119,30 @@ export function initTables() {
             FOREIGN KEY (${SHELFID}) REFERENCES ${SHELF}(${SHELFID}),
             FOREIGN KEY (${ITEMID}) REFERENCES ${ITEM}(${ITEMID})`
         );
+
+        // update row counts for each table after insert or delete
+        const tables = [ITEM, SHELF, SUBSHELF, SHELFITEM, TYPE];
+        for (const table of tables) {
+            DB.run(`
+                CREATE TRIGGER ${table}_rci
+                AFTER INSERT ON ${table}
+                BEGIN
+                    UPDATE ${TABLECOUNT}
+                    SET ${TCROWCOUNT} = ${TCROWCOUNT} + 1
+                    WHERE ${TCTABLENAME} = '${table}';
+                END;`
+            );
+
+            DB.run(`
+                CREATE TRIGGER ${table}_rcd
+                AFTER DELETE ON ${table}
+                BEGIN
+                    UPDATE ${TABLECOUNT}
+                    SET ${TCROWCOUNT} = ${TCROWCOUNT} - 1
+                    WHERE ${TCTABLENAME} = '${table}';
+                END;`
+            );
+        }
     });
 }
 

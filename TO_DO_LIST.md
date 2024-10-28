@@ -1,14 +1,6 @@
 - DB
-    - create a table that keeps track of count and last used id for fast lookups, 
-        - write trigger that keeps count of rows on a table
-            - +1 on insert into a table
-            - -1 on delete into a table
-        - write trigger to auto generate an id for a row
-            - last_id + 1 on insert into a table
-            - update column that column
-        - write trigger to add row into table
-            - create table adds a row
-            - drop table removes it
+    - create table that tracks number of items per shelf
+        - should have a trigger that does it automatically on insert or delete
     - need to automate it for whenever a new table is created
         - createTable should also create the trigger
     - fail safes
