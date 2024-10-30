@@ -88,10 +88,16 @@ export function tableExists(name: string): Promise<Boolean> {
 // column should be comma separated values that you would 
 // write in the parenthesis of a create table query
 // ex: column = "id INTEGER, name varchar(255)";
-export function createTable(name: string, column: string) {
+export function createTable(name: string, column: string): Promise<boolean> {
     name = name.replace(/"/g, '""');    // handle quotations in the name
-    let query: string = `CREATE TABLE ${name} (${column})`;
-    DB.run(query);
+    const query: string = `CREATE TABLE ${name} (${column})`;
+
+    return new Promise((reject, resolve) => {
+        DB.run(query, (err: any) => {
+            if(err) resolve(false)
+            else resolve(true)
+        });
+    });
 }
 
 
@@ -102,7 +108,8 @@ export function createTable(name: string, column: string) {
 // it should also be wrapped in parenthesis
 // ex: '(col_a, col_b, col_c)'
 export function insertInto(table_name: string, values: string[], custom_columns: string=""): Promise<boolean> {
-    let query = `INSERT INTO ${table_name} ${custom_columns} VALUES ` + values.join(", ") + `;`;
+    const query = `INSERT INTO ${table_name} ${custom_columns} VALUES ` + values.join(", ") + `;`;
+
     return new Promise((reject, resolve) => {
         DB.run(query, (err: any) => {
             if(err) resolve(false)
@@ -116,6 +123,7 @@ export function insertInto(table_name: string, values: string[], custom_columns:
 // ex: set = `a = 13, b = 'town hall'`
 export function update(table_name: string, set: string, condition: string): Promise<boolean> {
     const query = `UPDATE ${table_name} SET ${set} WHERE ${condition}`;
+
     return new Promise((reject, resolve) => {
         DB.run(query, (err: any) => {
             if(err) resolve(false)
