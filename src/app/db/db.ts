@@ -1,8 +1,12 @@
 const sqlite3 = require('sqlite3').verbose();
-
-
 export let DB: any;
 
+/**
+* Contents (ctrl + f): 
+*   GET TABLE DATA
+*   DB MODIFYING FUNCTIONS
+*   DB SETUP FUNCTIONS 
+*/
 
 // Table names and attributes
 const ITEM = "Item";
@@ -35,6 +39,8 @@ const SHELFCOUNT = 'ShelfCount';
 const SHELFROWS = 'shelf_rows';
 
 
+// GET TABLE DATA
+
 export function numTables(): Promise<number> {
     return new Promise((resolve) => {
         let count = 0;
@@ -43,26 +49,6 @@ export function numTables(): Promise<number> {
             count += 1;
         }, () => {
             resolve(count);
-        });
-    });
-}
-
-
-// column should be comma separated values that you would 
-// write in the parenthesis of a create table query
-// ex: column = "id INTEGER, name varchar(255)";
-export function createTable(name: string, column: string) {
-    name = name.replace(/"/g, '""');    // handle quotations in the name
-    let query: string = `CREATE TABLE ${name} (${column})`;
-    DB.run(query);
-}
-
-
-export function tableExists(name: string): Promise<Boolean> {
-    return new Promise((resolve) => {
-        DB.get(`SELECT name FROM sqlite_master WHERE type='table' AND name='${name}'`, (err: any, row: any) => {
-            if (row) resolve(true);
-            else resolve(false);
         });
     });
 }
@@ -83,6 +69,32 @@ export function getColumns(table_name: string): Promise<any[]> {
     });
 }
 
+
+export function tableExists(name: string): Promise<Boolean> {
+    return new Promise((resolve) => {
+        DB.get(`SELECT name FROM sqlite_master WHERE type='table' AND name='${name}'`, (err: any, row: any) => {
+            if (row) resolve(true);
+            else resolve(false);
+        });
+    });
+}
+
+// END OF TABLE DATA FUNCTIONS
+// DB MODIFYING FUNCTIONS
+
+// column should be comma separated values that you would 
+// write in the parenthesis of a create table query
+// ex: column = "id INTEGER, name varchar(255)";
+export function createTable(name: string, column: string) {
+    name = name.replace(/"/g, '""');    // handle quotations in the name
+    let query: string = `CREATE TABLE ${name} (${column})`;
+    DB.run(query);
+}
+
+
+
+// END OF DB MODIFYING FUNCTIONS
+// DB SETUP FUNCTIONS 
 
 // creates the tables and triggers required for this app to work
 export function initTables() {

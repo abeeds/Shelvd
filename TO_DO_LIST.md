@@ -1,4 +1,15 @@
 - DB
+    - base DB functions
+        - insert
+        - update
+        - delete
+    - shelf
+        - create
+        - update
+        - delete
+        - move shelf - change subshelf entry
+        - add child shelf - create subshelf entry
+    - add release date to items
     - need to automate it for whenever a new table is created
     - fail safes
         - check if a table exists before trying to create it in createTable
