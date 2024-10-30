@@ -125,6 +125,18 @@ export function update(table_name: string, set: string, condition: string): Prom
 }
 
 
+export function deleteFrom(table_name: string, condition: string): Promise<boolean> {
+    const query = `DELETE FROM ${table_name} WHERE ${condition}`;
+
+    return new Promise((reject, resolve) => {
+        DB.run(query, (err: any) => {
+            if(err) resolve(false)
+            else resolve(true)
+        });
+    });
+}
+
+
 // END OF DB MODIFYING FUNCTIONS
 // DB SETUP FUNCTIONS 
 
