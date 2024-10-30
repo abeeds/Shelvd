@@ -1,8 +1,4 @@
 - DB
-    - base DB functions
-        - insert
-        - update
-        - delete
     - shelf
         - create
         - update
