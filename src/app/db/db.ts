@@ -41,6 +41,7 @@ const SHELFROWS = 'shelf_rows';
 
 // GET TABLE DATA
 
+
 export function numTables(): Promise<number> {
     return new Promise((resolve) => {
         let count = 0;
@@ -79,8 +80,10 @@ export function tableExists(name: string): Promise<Boolean> {
     });
 }
 
+
 // END OF TABLE DATA FUNCTIONS
 // DB MODIFYING FUNCTIONS
+
 
 // column should be comma separated values that you would 
 // write in the parenthesis of a create table query
@@ -91,6 +94,22 @@ export function createTable(name: string, column: string) {
     DB.run(query);
 }
 
+
+// values should be a list of strings where each line contains a new row to be added
+// the strings should be wrapped in a parenthesis
+// ex: values = ['(a, b, c)', '(c, d, e)']
+// custom columns will dictate the order and columns being used on the insert
+// it should also be wrapped in parenthesis
+// ex: '(col_a, col_b, col_c)'
+export function insertInto(table_name: string, values: string[], custom_columns: string=""): Promise<boolean> {
+    let query = `INSERT INTO ${table_name} ${custom_columns} VALUES ` + values.join(", ") + `;`;
+    return new Promise((reject, resolve) => {
+        DB.run(query, (err: any) => {
+            if(err) resolve(false)
+            else resolve(true)
+        });
+    });
+}
 
 
 // END OF DB MODIFYING FUNCTIONS
