@@ -15,17 +15,11 @@ import { DB, getColumns, initDB } from '../../db/db';
         this.rows = new Map<string, any[]>
     }
 
-    ngOnInit() {
-        DB.each("SELECT name FROM sqlite_master WHERE type='table'", (err: any, table: any) => {
-            let all_rows: Map<string, any>[] = [];
-            DB.each(`SELECT * FROM ${table.name}`, (err: any, row: any) => {
-                all_rows.push(row);
-            }, () => {
-                this.rows.set(table, all_rows);
+    async ngOnInit() {
+        DB.all('SELECT name FROM sqlite_master WHERE type="table"', (err: any, rows: any) => {
+            (rows as { name: string }[]).forEach(row => {
+                console.log(row.name);
             });
-
-            console.log(this.rows);
         });
-
     }
 }

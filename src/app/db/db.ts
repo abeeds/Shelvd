@@ -101,50 +101,6 @@ export function createTable(name: string, column: string): Promise<boolean> {
 }
 
 
-// values should be a list of strings where each line contains a new row to be added
-// the strings should be wrapped in a parenthesis
-// ex: values = ['(a, b, c)', '(c, d, e)']
-// custom columns will dictate the order and columns being used on the insert
-// it should also be wrapped in parenthesis
-// ex: '(col_a, col_b, col_c)'
-export function insertInto(table_name: string, values: string[], custom_columns: string=""): Promise<boolean> {
-    const query = `INSERT INTO ${table_name} ${custom_columns} VALUES ` + values.join(", ") + `;`;
-
-    return new Promise((reject, resolve) => {
-        DB.run(query, (err: any) => {
-            if(err) resolve(false)
-            else resolve(true)
-        });
-    });
-}
-
-
-// set should be a string containing comma separated values that are being modified
-// ex: set = `a = 13, b = 'town hall'`
-export function update(table_name: string, new_vals: string, condition: string): Promise<boolean> {
-    const query = `UPDATE ${table_name} SET ${new_vals} WHERE ${condition}`;
-
-    return new Promise((reject, resolve) => {
-        DB.run(query, (err: any) => {
-            if(err) resolve(false)
-            else resolve(true)
-        });
-    });
-}
-
-
-export function deleteFrom(table_name: string, condition: string): Promise<boolean> {
-    const query = `DELETE FROM ${table_name} WHERE ${condition}`;
-
-    return new Promise((reject, resolve) => {
-        DB.run(query, (err: any) => {
-            if(err) resolve(false)
-            else resolve(true)
-        });
-    });
-}
-
-
 // END OF DB MODIFYING FUNCTIONS
 // DB SETUP FUNCTIONS 
 
