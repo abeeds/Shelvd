@@ -9,34 +9,34 @@ export let DB: any;
 */
 
 // Table names and attributes
-const ITEM = "Item";
-const ITEMID = "item_id";
-const ITEMNAME = "item_name";
-const ITEMIMAGE = "item_img"; // url to image
-const ITEMTYPE = "item_type"; // direct to another table
+export const ITEM = "Item";
+export const ITEMID = "item_id";
+export const ITEMNAME = "item_name";
+export const ITEMIMAGE = "item_img"; // url to image
+export const ITEMTYPE = "item_type"; // direct to another table
 
-const SHELF = "Shelf";
-const SHELFID = "shelf_id";
-const SHELFNAME = "shelf_name";
-const SHELFDESC = "shelf_desc";
+export const SHELF = "Shelf";
+export const SHELFID = "shelf_id";
+export const SHELFNAME = "shelf_name";
+export const SHELFDESC = "shelf_desc";
 
-const SUBSHELF = "Subshelf";
-const PARENTID = "parent_id";
-const CHILDID = "child_id";
+export const SUBSHELF = "Subshelf";
+export const PARENTID = "parent_id";
+export const CHILDID = "child_id";
 
-const SHELFITEM = "ShelfItem"; // shelfID and parentID
+export const SHELFITEM = "ShelfItem"; // shelfID and parentID
 
-const TYPE = "Type"; // table for different item types
-const TYPEID = "type_id";
-const TYPENAME = "type_name";
+export const TYPE = "Type"; // table for different item types
+export const TYPEID = "type_id";
+export const TYPENAME = "type_name";
 
-const TABLECOUNT = "TableCount";
-const TCTABLENAME = "table_name";
-const TCROWCOUNT = "row_count";
+export const TABLECOUNT = "TableCount";
+export const TCTABLENAME = "table_name";
+export const TCROWCOUNT = "row_count";
 
-const SHELFCOUNT = 'ShelfCount';
+export const SHELFCOUNT = 'ShelfCount';
 // shelf id
-const SHELFROWS = 'shelf_rows';
+export const SHELFROWS = 'shelf_rows';
 
 
 // GET TABLE DATA
