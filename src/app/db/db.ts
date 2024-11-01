@@ -121,8 +121,8 @@ export function insertInto(table_name: string, values: string[], custom_columns:
 
 // set should be a string containing comma separated values that are being modified
 // ex: set = `a = 13, b = 'town hall'`
-export function update(table_name: string, set: string, condition: string): Promise<boolean> {
-    const query = `UPDATE ${table_name} SET ${set} WHERE ${condition}`;
+export function update(table_name: string, new_vals: string, condition: string): Promise<boolean> {
+    const query = `UPDATE ${table_name} SET ${new_vals} WHERE ${condition}`;
 
     return new Promise((reject, resolve) => {
         DB.run(query, (err: any) => {
