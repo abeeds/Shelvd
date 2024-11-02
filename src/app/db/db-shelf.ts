@@ -57,7 +57,7 @@ export async function deleteShelf(shelf_id: number) {
 
     if(exists) {
         let success = true;
-        DB.run(`DELETE FROM ${SHELF} WHERE ${SHELFID} = ?`, [shelf_id], (err:any) => {
+        await DB.run(`DELETE FROM ${SHELF} WHERE ${SHELFID} = ?`, [shelf_id], (err:any) => {
             if(err) success = false;
         })
         return success ? [success, `Shelf ${shelf_id} deleted.`] : [success, "Failed to delete shelf."];
