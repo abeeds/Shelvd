@@ -32,7 +32,7 @@ export async function updateShelf(shelf_id: number, new_name: string=``, new_des
 
     if(exists) {
         // build query
-        let params = [] 
+        let params = [];
         let query = `UPDATE ${SHELF} SET `;
         if(new_name) {
             query += `${SHELFNAME} = ? `;
@@ -56,7 +56,20 @@ export async function updateShelf(shelf_id: number, new_name: string=``, new_des
     }
 }
 
-// delete shelf
+
+export async function deleteShelf(shelf_id: string) {
+    const exists = await tableExists(SHELF);
+
+    if(exists) {
+        let success = true;
+        DB.run(`DELETE FROM ${SHELF} WHERE ${SHELFID} = ?`, [shelf_id], (err:any) => {
+            if(err) success = false;
+        })
+        return success ? [success, `Shelf ${shelf_id} deleted.`] : [success, "Failed to delete shelf."];
+    } else {
+        return [false, "Shelf table does not exist."];
+    }
+}
 
 
 // move shelf
