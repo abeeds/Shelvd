@@ -82,7 +82,7 @@ export async function checkSubshelf(parent_id: number, child_id: number): Promis
 }
 
 
-export async function insertSubshelf(parent_id: number, child_id: number) {
+export async function insertSubshelf(parent_id: number, child_id: number): Promise<[boolean, string]> {
     const table_exists = await tableExists(SUBSHELF);
     if(!table_exists) return [false, "Subshelf table does not exist."];
 
@@ -100,7 +100,7 @@ export async function insertSubshelf(parent_id: number, child_id: number) {
 }
 
 
-export async function deleteSubshelf(parent_id: number, child_id: number) {
+export async function deleteSubshelf(parent_id: number, child_id: number): Promise<[boolean, string]> {
     const exists = await tableExists(SUBSHELF);
     if(!exists) return [false, "Subshelf table does not exist."];
 
@@ -119,7 +119,7 @@ export async function deleteSubshelf(parent_id: number, child_id: number) {
 // moves a child shelf to a new parent shelf
 // if it already exists in the new parent shelf
 // it will just delete it from the old parent
-export async function moveSubshelf(new_parent_id: number, old_parent_id: number, child_id: number) {
+export async function moveSubshelf(new_parent_id: number, old_parent_id: number, child_id: number): Promise<[boolean, string]> {
     const table_exists = await tableExists(SUBSHELF);
     if(!table_exists) return [false, "Subshelf table does not exist."];
     const in_new_shelf = await checkSubshelf(new_parent_id, child_id);
@@ -136,12 +136,7 @@ export async function moveSubshelf(new_parent_id: number, old_parent_id: number,
     }
 
     if(success[0]) {
-        await DB.run(`DELETE FROM ${SUBSHELF} WHERE ${PARENTID} = ? AND ${CHILDID} = ?`,
-            [old_parent_id, child_id],
-            (err: any) => {
-                if(err) success = [false, `${err}`];
-            }
-        );
+        success = await deleteSubshelf(old_parent_id, child_id);
     }
 
     return success;
