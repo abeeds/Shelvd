@@ -9,7 +9,7 @@ const SHELF_COLS = `(${SHELFNAME}, ${SHELFDESC})`;
 const SUBSHELF_COLS = `(${PARENTID}, ${CHILDID})`
 
 
-export async function createShelf(shelf_name: string, shelf_desc: string=``): Promise<[boolean, string]> {
+export async function insertShelf(shelf_name: string, shelf_desc: string=``): Promise<[boolean, string]> {
     const exists = await tableExists(SHELF);
     if(!exists) return [false, "Shelf table does not exist."];
 
@@ -82,6 +82,24 @@ export async function checkSubshelf(parent_id: number, child_id: number): Promis
 }
 
 
+export async function insertSubshelf(parent_id: number, child_id: number) {
+    const table_exists = await tableExists(SUBSHELF);
+    if(!table_exists) return [false, "Subshelf table does not exist."];
+
+
+    let success: [boolean, string] = [true, `${child_id} is now a child of ${parent_id}`];
+    await DB.run(`INSERT INTO ${SUBSHELF} ${SUBSHELF_COLS}
+        VALUES (?, ?)`,
+        [parent_id, child_id],
+        (err: any) => {
+            if (err) success = [false, `${err}`];
+        }
+    )
+
+    return success;
+}
+
+
 export async function deleteSubshelf(parent_id: number, child_id: number) {
     const exists = await tableExists(SUBSHELF);
     if(!exists) return [false, "Subshelf table does not exist."];
@@ -125,24 +143,6 @@ export async function moveSubshelf(new_parent_id: number, old_parent_id: number,
             }
         );
     }
-
-    return success;
-}
-
-
-export async function insertSubshelf(parent_id: number, child_id: number) {
-    const table_exists = await tableExists(SUBSHELF);
-    if(!table_exists) return [false, "Subshelf table does not exist."];
-
-
-    let success: [boolean, string] = [true, `${child_id} is now a child of ${parent_id}`];
-    await DB.run(`INSERT INTO ${SUBSHELF} ${SUBSHELF_COLS}
-        VALUES (?, ?)`,
-        [parent_id, child_id],
-        (err: any) => {
-            if (err) success = [false, `${err}`];
-        }
-    )
 
     return success;
 }
