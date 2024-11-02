@@ -126,13 +126,7 @@ export async function moveSubshelf(new_parent_id: number, old_parent_id: number,
 
     let success: [boolean, string] = [true, `Moved ${child_id} to ${new_parent_id}`];
     if(!in_new_shelf) {
-        await DB.run(`INSERT INTO ${SUBSHELF} ${SUBSHELF_COLS}
-            VALUES (?, ?)`,
-            [new_parent_id, child_id],
-            (err: any) => {
-                if(err) success = [false, `${err}`]
-            }
-        );
+        success = await insertSubshelf(new_parent_id, child_id);
     }
 
     if(success[0]) {
