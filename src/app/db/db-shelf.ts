@@ -10,21 +10,18 @@ const COLS = `(${SHELFNAME}, ${SHELFDESC})`;
 
 export async function createShelf(shelf_name: string, shelf_desc: string=``): Promise<[boolean, string]> {
     const exists = await tableExists(SHELF);
+    if(!exists) return [false, "Shelf table does not exist."];
 
-    if(exists) {
-        let success = true;
-        await DB.run(`INSERT INTO ${SHELF} ${COLS}
-            VALUES ($shelfname, $shelfdesc)`, {
-            $shelfname: shelf_name,
-            $shelfdesc: shelf_desc
-        }, (err: any) => {
-            if(err) success = false
-        })
+    let success: [boolean, string] = [true, "Shelf created successfully."];
+    await DB.run(`INSERT INTO ${SHELF} ${COLS}
+        VALUES ($shelfname, $shelfdesc)`, {
+        $shelfname: shelf_name,
+        $shelfdesc: shelf_desc
+    }, (err: any) => {
+        if(err) success = [false, "Failed to create shelf."];
+    })
 
-        return success ? [success, "Shelf created successfully."] : [success, "Failed to create shelf."];
-    } else {
-        return [false, "Shelf table does not exist."];
-    }
+    return success;
 }
 
 
