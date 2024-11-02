@@ -69,15 +69,15 @@ export async function checkSubshelf(parent_id: number, child_id: number): Promis
     const exists = await tableExists(SUBSHELF);
     if(!exists) return [false, "Subshelf table does not exist."];
 
-    let res: [boolean, string] = [false, `${child_id} is not a child of ${parent_id}.`]
+    let success: [boolean, string] = [false, `${child_id} is not a child of ${parent_id}.`]
     await DB.run(`SELECT * FROM ${SUBSHELF} WHERE ${PARENTID} = ? AND ${CHILDID} = ?`,
         [parent_id, child_id],
         (err: any, row: any) => {
-            if (err) res = [false, "Failed to check subshelf."];
-            else if (row) res = [true, `${child_id} is a child of ${parent_id}.`]
+            if (err) success = [false, "Failed to check subshelf."];
+            else if (row) success = [true, `${child_id} is a child of ${parent_id}.`]
         }
     );
-    return res;
+    return success;
 }
 
 
