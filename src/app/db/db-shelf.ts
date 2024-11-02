@@ -52,18 +52,16 @@ export async function updateShelf(shelf_id: number, new_name: string=``, new_des
 }
 
 
-export async function deleteShelf(shelf_id: number) {
+export async function deleteShelf(shelf_id: number): Promise<[boolean, string]> {
     const exists = await tableExists(SHELF);
+    if (!exists) return [false, "Shelf table does not exist."];
 
-    if(exists) {
-        let success = true;
-        await DB.run(`DELETE FROM ${SHELF} WHERE ${SHELFID} = ?`, [shelf_id], (err:any) => {
-            if(err) success = false;
-        })
-        return success ? [success, `Shelf ${shelf_id} deleted.`] : [success, "Failed to delete shelf."];
-    } else {
-        return [false, "Shelf table does not exist."];
-    }
+    let success: [boolean, string] = [true, `Shelf ${shelf_id} deleted.`];
+    await DB.run(`DELETE FROM ${SHELF} WHERE ${SHELFID} = ?`, [shelf_id], (err:any) => {
+        if(err) success = [false, "Failed to delete shelf."];
+    })
+    return success;
+
 }
 
 
