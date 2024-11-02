@@ -1,6 +1,7 @@
 import { Query } from "@angular/core";
 import { DB,  tableExists } from "./db";
 import { SHELF, SHELFID, SHELFNAME, SHELFDESC } from "./db"; // shelf columns
+import { SUBSHELF, PARENTID, CHILDID } from "./db"; // subshelf columns
 const sqlite3 = require('sqlite3').verbose();
 
 
@@ -57,7 +58,7 @@ export async function updateShelf(shelf_id: number, new_name: string=``, new_des
 }
 
 
-export async function deleteShelf(shelf_id: string) {
+export async function deleteShelf(shelf_id: number) {
     const exists = await tableExists(SHELF);
 
     if(exists) {
@@ -72,8 +73,6 @@ export async function deleteShelf(shelf_id: string) {
 }
 
 
-// move shelf
-// change subshelf relation
 
 
 // add child shelf
