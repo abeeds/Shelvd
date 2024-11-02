@@ -86,7 +86,6 @@ export async function insertSubshelf(parent_id: number, child_id: number): Promi
     const table_exists = await tableExists(SUBSHELF);
     if(!table_exists) return [false, "Subshelf table does not exist."];
 
-
     let success: [boolean, string] = [true, `${child_id} is now a child of ${parent_id}`];
     await DB.run(`INSERT INTO ${SUBSHELF} ${SUBSHELF_COLS}
         VALUES (?, ?)`,
