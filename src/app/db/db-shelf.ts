@@ -5,7 +5,8 @@ import { SUBSHELF, PARENTID, CHILDID } from "./db"; // subshelf columns
 const sqlite3 = require('sqlite3').verbose();
 
 
-const COLS = `(${SHELFNAME}, ${SHELFDESC})`;
+const SHELF_COLS = `(${SHELFNAME}, ${SHELFDESC})`;
+const SUBSHELF_COLS = `(${PARENTID}, ${CHILDID})`
 
 
 export async function createShelf(shelf_name: string, shelf_desc: string=``): Promise<[boolean, string]> {
@@ -13,7 +14,7 @@ export async function createShelf(shelf_name: string, shelf_desc: string=``): Pr
     if(!exists) return [false, "Shelf table does not exist."];
 
     let success: [boolean, string] = [true, "Shelf created successfully."];
-    await DB.run(`INSERT INTO ${SHELF} ${COLS}
+    await DB.run(`INSERT INTO ${SHELF} ${SHELF_COLS}
         VALUES ($shelfname, $shelfdesc)`, {
         $shelfname: shelf_name,
         $shelfdesc: shelf_desc
@@ -107,7 +108,7 @@ export async function moveShelf(new_parent_id: number, old_parent_id: number, ch
 
     let success: [boolean, string] = [true, `Moved ${child_id} to ${new_parent_id}`];
     if(!in_new_shelf) {
-        await DB.run(`INSERT INTO ${SUBSHELF} ${COLS}
+        await DB.run(`INSERT INTO ${SUBSHELF} ${SUBSHELF_COLS}
             VALUES (?, ?)`,
             [new_parent_id, child_id],
             (err: any) => {
@@ -131,3 +132,19 @@ export async function moveShelf(new_parent_id: number, old_parent_id: number, ch
 
 // add child shelf
 // create subshelf relation
+export async function addSubshelf(parent_id: number, child_id: number) {
+    const table_exists = await tableExists(SUBSHELF);
+    if(!table_exists) return [false, "Subshelf table does not exist."];
+
+
+    let success: [boolean, string] = [true, `${child_id} is now a child of ${parent_id}`];
+    await DB.run(`INSERT INTO ${SUBSHELF} ${SUBSHELF_COLS}
+        VALUES (?, ?)`,
+        [parent_id, child_id],
+        (err: any) => {
+            if (err) success = [false, `${err}`];
+        }
+    )
+
+    return success;
+}
