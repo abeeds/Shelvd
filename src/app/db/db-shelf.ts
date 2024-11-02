@@ -65,19 +65,19 @@ export async function deleteShelf(shelf_id: number): Promise<[boolean, string]> 
 }
 
 
-
-export async function checkSubshelf(parent_id: number, child_id: number) {
+export async function checkSubshelf(parent_id: number, child_id: number): Promise<[boolean, string]> {
     const exists = await tableExists(SHELF);
     if(!exists) return [false, "Shelf table does not exist."];
 
-    let res = [false, `${child_id} is not a child of ${parent_id}.`]
+    let res: [boolean, string] = [false, `${child_id} is not a child of ${parent_id}.`]
     await DB.run(`SELECT * FROM ${SUBSHELF} WHERE ${PARENTID} = ? AND ${CHILDID} = ?`,
-        [parent_id, child_id], (err: any, row: any) => {
+        [parent_id, child_id],
+        (err: any, row: any) => {
             if (err) res = [false, "Failed to check subshelf."];
             else if (row) res = [true, `${child_id} is a child of ${parent_id}.`]
         }
     );
-    return res;    
+    return res;
 }
 
 
