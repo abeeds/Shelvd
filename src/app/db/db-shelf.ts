@@ -11,16 +11,16 @@ export async function createShelf(shelf_name: string, shelf_desc: string=``): Pr
     const exists = await tableExists(SHELF);
 
     if(exists) {
-        let result = true;
+        let success = true;
         await DB.run(`INSERT INTO ${SHELF} ${COLS}
             VALUES ($shelfname, $shelfdesc)`, {
             $shelfname: shelf_name,
             $shelfdesc: shelf_desc
         }, (err: any) => {
-            if(err) result = false
+            if(err) success = false
         })
 
-        return result ? [result, "Shelf created successfully."] : [result, "Failed to create shelf."];
+        return success ? [success, "Shelf created successfully."] : [success, "Failed to create shelf."];
     } else {
         return [false, "Shelf table does not exist."];
     }
