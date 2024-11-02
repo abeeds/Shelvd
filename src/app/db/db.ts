@@ -4,7 +4,6 @@ export let DB: any;
 /**
 * Contents (ctrl + f): 
 *   GET TABLE DATA
-*   DB MODIFYING FUNCTIONS
 *   DB SETUP FUNCTIONS 
 */
 
@@ -82,70 +81,57 @@ export function tableExists(name: string): Promise<Boolean> {
 
 
 // END OF TABLE DATA FUNCTIONS
-// DB MODIFYING FUNCTIONS
-
-
-// column should be comma separated values that you would 
-// write in the parenthesis of a create table query
-// ex: column = "id INTEGER, name varchar(255)";
-export function createTable(name: string, column: string): Promise<boolean> {
-    name = name.replace(/"/g, '""');    // handle quotations in the name
-    const query: string = `CREATE TABLE ${name} (${column})`;
-
-    return new Promise((reject, resolve) => {
-        DB.run(query, (err: any) => {
-            if(err) resolve(false)
-            else resolve(true)
-        });
-    });
-}
-
-
-// END OF DB MODIFYING FUNCTIONS
 // DB SETUP FUNCTIONS 
 
 // creates the tables and triggers required for this app to work
 export function initTables() {
     DB.serialize(() => {
-        createTable(TABLECOUNT,
-            `${TCTABLENAME} varchar(255),
-            ${TCROWCOUNT} INTEGER,
-            PRIMARY KEY (${TCTABLENAME})`
-        );
-        createTable(SHELF,
-            `${SHELFID} INTEGER PRIMARY KEY AUTOINCREMENT,
-            ${SHELFNAME} varchar(255),
-            ${SHELFDESC} TEXT`
-        );
-        createTable(TYPE,
-            `${TYPEID} INTEGER PRIMARY KEY AUTOINCREMENT,
-            ${TYPENAME} varchar(255)`
+        DB.run(`CREATE TABLE ${TABLECOUNT} (
+                ${TCTABLENAME} varchar(255),
+                ${TCROWCOUNT} INTEGER,
+                PRIMARY KEY (${TCTABLENAME})
+            )`
         )
-        createTable(ITEM,
-            `${ITEMID} INTEGER PRIMARY KEY AUTOINCREMENT,
-            ${ITEMNAME} TEXT,
-            ${ITEMIMAGE} TEXT,
-            ${ITEMTYPE} INTEGER,
-            FOREIGN KEY (${ITEMTYPE}) REFERENCES ${TYPE}(${TYPEID})`
+        DB.run(`CREATE TABLE ${SHELF} (
+                ${SHELFID} INTEGER PRIMARY KEY AUTOINCREMENT,
+                ${SHELFNAME} varchar(255),
+                ${SHELFDESC} TEXT
+            )`
+        )
+        DB.run(`CREATE TABLE ${TYPE} (
+                ${TYPEID} INTEGER PRIMARY KEY AUTOINCREMENT,
+                ${TYPENAME} varchar(255)
+            )`
+        )
+        DB.run(`CREATE TABLE ${ITEM} (
+                ${ITEMID} INTEGER PRIMARY KEY AUTOINCREMENT,
+                ${ITEMNAME} TEXT,
+                ${ITEMIMAGE} TEXT,
+                ${ITEMTYPE} INTEGER,
+                FOREIGN KEY (${ITEMTYPE}) REFERENCES ${TYPE}(${TYPEID})
+            )`
         );
-        createTable(SUBSHELF,
-            `${PARENTID} INTEGER,
-            ${CHILDID} INTEGER,
-            PRIMARY KEY (${PARENTID}, ${CHILDID}),
-            FOREIGN KEY (${PARENTID}) REFERENCES ${SHELF}(${SHELFID}),
-            FOREIGN KEY (${CHILDID}) REFERENCES ${SHELF}(${SHELFID})`
+        DB.run(`CREATE TABLE ${SUBSHELF} (
+                ${PARENTID} INTEGER,
+                ${CHILDID} INTEGER,
+                PRIMARY KEY (${PARENTID}, ${CHILDID}),
+                FOREIGN KEY (${PARENTID}) REFERENCES ${SHELF}(${SHELFID}),
+                FOREIGN KEY (${CHILDID}) REFERENCES ${SHELF}(${SHELFID})
+            )`
         );
-        createTable(SHELFITEM,
-            `${SHELFID} INTEGER,
-            ${ITEMID} INTEGER,
-            PRIMARY KEY (${SHELFID}, ${ITEMID}),
-            FOREIGN KEY (${SHELFID}) REFERENCES ${SHELF}(${SHELFID}),
-            FOREIGN KEY (${ITEMID}) REFERENCES ${ITEM}(${ITEMID})`
+        DB.run(`CREATE TABLE ${SHELFITEM} (
+                ${SHELFID} INTEGER,
+                ${ITEMID} INTEGER,
+                PRIMARY KEY (${SHELFID}, ${ITEMID}),
+                FOREIGN KEY (${SHELFID}) REFERENCES ${SHELF}(${SHELFID}),
+                FOREIGN KEY (${ITEMID}) REFERENCES ${ITEM}(${ITEMID})
+            )`
         );
-        createTable(SHELFCOUNT, `
-            ${SHELFID} INTEGER PRIMARY KEY,
-            ${SHELFROWS} INTEGER,
-            FOREIGN KEY (${SHELFID}) REFERENCES ${SHELF}(${SHELFID})`
+        DB.run(`CREATE TABLE ${SHELFCOUNT} (
+                ${SHELFID} INTEGER PRIMARY KEY,
+                ${SHELFROWS} INTEGER,
+                FOREIGN KEY (${SHELFID}) REFERENCES ${SHELF}(${SHELFID})
+            )`
         );
 
         // update row counts for each table after insert or delete
