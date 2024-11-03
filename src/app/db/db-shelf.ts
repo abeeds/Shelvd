@@ -17,7 +17,7 @@ export async function insertShelf(shelf_name: string, shelf_desc: string=``): Pr
         $shelfname: shelf_name,
         $shelfdesc: shelf_desc
     }, (err: any) => {
-        if(err) success = [false, "Failed to create shelf."];
+        if(err) success = [false, `${err}`];
     })
 
     return success;
@@ -45,7 +45,7 @@ export async function updateShelf(shelf_id: number, new_name: string=``, new_des
     // run query
     let success: [boolean, string] = [true, `Shelf ${shelf_id} updated successfully.`];
     await DB.run(query, params, (err: any) => {
-        if(err) success = [false, "Failed to update shelf."];
+        if(err) success = [false, `${err}`];
     })
     return success;
 }
@@ -57,7 +57,7 @@ export async function deleteShelf(shelf_id: number): Promise<[boolean, string]> 
 
     let success: [boolean, string] = [true, `Shelf ${shelf_id} deleted.`];
     await DB.run(`DELETE FROM ${SHELF} WHERE ${SHELFID} = ?`, [shelf_id], (err:any) => {
-        if(err) success = [false, "Failed to delete shelf."];
+        if(err) success = [false, `${err}`];
     })
     return success;
 
@@ -72,7 +72,7 @@ export async function checkSubshelf(parent_id: number, child_id: number): Promis
     await DB.run(`SELECT * FROM ${SUBSHELF} WHERE ${PARENTID} = ? AND ${CHILDID} = ?`,
         [parent_id, child_id],
         (err: any, row: any) => {
-            if (err) success = [false, "Failed to check subshelf."];
+            if (err) success = [false, `${err}`];
             else if (row) success = [true, `${child_id} is a child of ${parent_id}.`]
         }
     );
