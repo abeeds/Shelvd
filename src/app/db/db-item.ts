@@ -26,7 +26,41 @@ export async function insertItem(
 }
 
 
-// update item
+export async function updateItem(
+    item_id: number,
+    new_name: string=``,
+    new_image: string=``,
+    new_type: string=``
+) {
+    const exists = await tableExists(ITEM);
+    if(!exists) return [false, "Item table does not exist"];
+
+    // build query
+    let params = [];
+    let query = `UPDATE ${ITEM} SET `;
+    if(new_name) {
+        query += `${ITEMNAME} = ? `;
+        params.push(new_name);
+    } if(new_image) {
+        if(params) query += `, `;
+        query += `${ITEMIMAGE} = ? `;
+        params.push(new_image);
+    } if(new_type) {
+        if(params) query += `, `;
+        query += `${ITEMTYPE} = ? `;
+        params.push(new_type);
+    }
+    query += `WHERE ${ITEMID} = ?`;
+    params.push(item_id);
+
+    // run query
+    return new Promise((resolve) => {
+        DB.run(query, params, (err: any) => {
+            if (err) resolve([false, `${err}`]);
+            resolve([true, `Item ${item_id} updated successfully.`]);
+        });
+    });
+}
 
 
 // delete item
