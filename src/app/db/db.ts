@@ -137,6 +137,10 @@ export function initTables() {
         // update row counts for each table after insert or delete
         const tables = [ITEM, SHELF, SUBSHELF, SHELFITEM, TYPE];
         for (const table of tables) {
+            DB.run(`INSERT INTO ${TABLECOUNT} (${TCTABLENAME}, ${TCROWCOUNT})
+                VALUES (?, ?)`,
+                [table, 0]
+            );
             DB.run(`
                 CREATE TRIGGER ${table}_rci
                 AFTER INSERT ON ${table}
