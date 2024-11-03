@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { DB, getColumns, initDB } from '../../db/db';
+import { DB, SHELFID, TABLECOUNT, TCTABLENAME } from '../../db/db';
+import { SHELF } from '../../db/db';
+import { deleteShelf, insertShelf, updateShelf } from '../../db/db-shelf';
 
 
 
@@ -15,10 +17,24 @@ import { DB, getColumns, initDB } from '../../db/db';
         this.rows = new Map<string, any[]>
     }
 
-    async ngOnInit() {
-        DB.all('SELECT name FROM sqlite_master WHERE type="table"', (err: any, rows: any) => {
-            (rows as { name: string }[]).forEach(row => {
-                console.log(row.name);
+    ngOnInit() {
+        new Promise((resolve) => {
+            DB.each(`SELECT * FROM ${TABLECOUNT} WHERE ${TCTABLENAME} = ?`, 
+                [SHELF],
+                (err: any, row: any) => {
+                    console.log(row);
+                    resolve(row.row_count);
+                }
+            );
+        }).then(async (count) => {
+            console.log(count);
+            if(count === 0) {
+                await insertShelf("movies");
+                await insertShelf("action movies");
+                await insertShelf("comics");
+            }
+            await DB.each(`SELECT * FROM ${SHELF}`, (err: any, row:any) => {
+                console.log(row);
             });
         });
     }
