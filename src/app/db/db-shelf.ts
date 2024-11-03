@@ -1,4 +1,3 @@
-import { Query } from "@angular/core";
 import { DB,  tableExists } from "./db";
 import { SHELF, SHELFID, SHELFNAME, SHELFDESC } from "./db"; // shelf columns
 import { SUBSHELF, PARENTID, CHILDID } from "./db"; // subshelf columns
