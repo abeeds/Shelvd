@@ -23,7 +23,7 @@ export const SUBSHELF = "Subshelf";
 export const PARENTID = "parent_id";
 export const CHILDID = "child_id";
 
-export const SHELFITEM = "ShelfItem"; // shelfID and parentID
+export const SHELFITEM = "ShelfItem"; // shelf_id and item_id
 
 export const TYPE = "Type"; // table for different item types
 export const TYPEID = "type_id";
