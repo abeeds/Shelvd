@@ -1,7 +1,6 @@
 import { DB,  tableExists } from "./db";
 import { SHELF, SHELFID, SHELFNAME, SHELFDESC } from "./db"; // shelf columns
 import { SUBSHELF, PARENTID, CHILDID } from "./db"; // subshelf columns
-const sqlite3 = require('sqlite3').verbose();
 
 
 const SHELF_COLS = `(${SHELFNAME}, ${SHELFDESC})`;
