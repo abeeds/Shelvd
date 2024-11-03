@@ -4,6 +4,7 @@ import { SHELFITEM } from "./db";
 
 const ITEM_COLS = `(${ITEMNAME}, ${ITEMIMAGE}, ${ITEMTYPE})`;
 
+
 export async function insertItem(
     item_name: string,
     item_image: string=``,
@@ -12,18 +13,18 @@ export async function insertItem(
     const exists = await tableExists(ITEM);
     if(!exists) return [false, "Item table does not exist"];
 
-    let success: [boolean, string] = [true, "Item created successfully."];
-
-    await DB.run(`INSERT INTO ${ITEM} ${ITEM_COLS}
-        VALUES (?, ?, ?)`,
-        [item_name, item_image, item_type],
-        (err: any) => {
-            if (err) success = [false, `${err}`]
-        }
-    );
-
-    return success;
+    return new Promise((resolve) => {
+        DB.run(`INSERT INTO ${ITEM} ${ITEM_COLS}
+            VALUES (?, ?, ?)`,
+            [item_name, item_image, item_type],
+            (err: any) => {
+                if (err) resolve([false, `${err}`]);
+                resolve([true, "Item created successfully."]);
+            }
+        );
+    });
 }
+
 
 // update item
 
