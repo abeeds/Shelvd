@@ -1,5 +1,5 @@
 import { resolve } from "node:path";
-import { DB, ITEMNAME, SHELFID, tableExists } from "./db";
+import { DB, ITEMNAME, SHELF, SHELFID, tableExists } from "./db";
 import { ITEM, ITEMID, ITEMIMAGE, ITEMTYPE } from "./db"; // item collumns
 import { SHELFITEM } from "./db";
 
@@ -112,7 +112,20 @@ export async function insertShelfItem(shelf_id: number, item_id: number): Promis
 }
 
 
-// remove from shelf
+export async function deleteShelfItem(shelf_id: number, item_id: number): Promise<[boolean, string]> {
+    const table_exists = await tableExists(SHELFITEM);
+    if(!table_exists) return [false, "ShelfItem table does not exist."];
+
+    return new Promise((resolve) => {
+            DB.run(`DELETE FROM ${SHELFITEM} WHERE ${SHELFID} = ? AND ${ITEMID} = ?`,
+            [shelf_id, item_id],
+            (err: any) => {
+                if(err) resolve([false, `${err}`]);
+                resolve([true, "Deleted ShelfItem relation."])
+            }
+        );
+    });
+}
 
 
 // move to different shelf
