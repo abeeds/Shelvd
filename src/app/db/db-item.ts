@@ -4,6 +4,7 @@ import { ITEM, ITEMID, ITEMIMAGE, ITEMTYPE } from "./db"; // item collumns
 import { SHELFITEM } from "./db";
 
 const ITEM_COLS = `(${ITEMNAME}, ${ITEMIMAGE}, ${ITEMTYPE})`;
+const SHELFITEM_COLS = `(${SHELFID}, ${ITEMID})`;
 
 
 export async function insertItem(
@@ -94,7 +95,21 @@ export async function checkShelfItem(shelf_id: number, item_id: number): Promise
 }
 
 
-// add to shelf
+export async function insertShelfItem(shelf_id: number, item_id: number): Promise<[boolean, string]> {
+    const table_exists = await tableExists(SHELFITEM);
+    if(!table_exists) return [false, "ShelfItem table does not exist."];
+
+    return new Promise((resolve) => {
+        DB.run(`INSERT INTO ${SHELFITEM} ${SHELFITEM_COLS}
+            VALUES (?, ?)`,
+            [shelf_id, item_id],
+            (err: any) => {
+                if (err) resolve([false, `${err}`]);
+                resolve([true, `${item_id} is now in the shelf ${shelf_id}`]);
+            }
+        );
+    });
+}
 
 
 // remove from shelf
