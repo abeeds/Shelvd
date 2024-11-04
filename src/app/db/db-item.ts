@@ -32,7 +32,7 @@ export async function updateItem(
     new_name: string=``,
     new_image: string=``,
     new_type: string=``
-) {
+): Promise<[boolean, string]> {
     const exists = await tableExists(ITEM);
     if(!exists) return [false, "Item table does not exist"];
 
