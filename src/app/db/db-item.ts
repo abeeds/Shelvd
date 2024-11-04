@@ -1,5 +1,4 @@
-import { resolve } from "node:path";
-import { DB, ITEMNAME, SHELF, SHELFID, tableExists } from "./db";
+import { DB, ITEMNAME, SHELFID, tableExists } from "./db";
 import { ITEM, ITEMID, ITEMIMAGE, ITEMTYPE } from "./db"; // item collumns
 import { SHELFITEM } from "./db";
 
@@ -128,4 +127,22 @@ export async function deleteShelfItem(shelf_id: number, item_id: number): Promis
 }
 
 
-// move to different shelf
+// moves an item to a new shelf
+// if it already exists in the new shelf
+// it will just delete it from the old shelf
+export async function moveShelfItem(new_shelf_id: number, old_shelf_id: number, item_id: number): Promise<[boolean, string]> {
+    const table_exists = await tableExists(SHELFITEM);
+    if(!table_exists) return [false, "ShelfItem table does not exist."];
+    const in_new_shelf = await checkShelfItem(new_shelf_id, item_id);
+
+    let success: [boolean, string] = [true, `Moved ${item_id} to ${new_shelf_id}`];
+    if(!in_new_shelf) {new_shelf_id
+        success = await insertShelfItem(new_shelf_id, item_id);
+    }
+
+    if(success[0]) {
+        success = await deleteShelfItem(old_shelf_id, item_id);
+    }
+
+    return success;
+}
