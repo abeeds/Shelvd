@@ -1,12 +1,7 @@
 - DB
     - shelf
-        - create
-        - update
-        - delete
-        - move shelf - change subshelf entry
-        - add child shelf - create subshelf entry
+        - fix returns, should return a promise like in db-items.ts
     - add release date to items
-    - need to automate it for whenever a new table is created
     - fail safes
         - check if a table exists before trying to create it in createTable
 - Front end
