@@ -1,3 +1,4 @@
+import { resolve } from "node:path";
 import { DB, ITEMNAME, tableExists } from "./db";
 import { ITEM, ITEMID, ITEMIMAGE, ITEMTYPE } from "./db"; // item collumns
 import { SHELFITEM } from "./db";
@@ -63,7 +64,17 @@ export async function updateItem(
 }
 
 
-// delete item
+export async function deleteItem(item_id: number): Promise<[boolean, string]> {
+    const exists = await tableExists(ITEM);
+    if (!exists) return [false, "Item table does not exist."];
+
+    return new Promise((resolve) => {
+        DB.run(`DELETE FROM ${ITEM} WHERE ${ITEMID} = ?`, [item_id], (err:any) => {
+            if(err) resolve([false, `${err}`]);
+            resolve([true, `Item ${item_id} deleted.`]);
+        });
+    });
+}
 
 
 // check if item in shelf
