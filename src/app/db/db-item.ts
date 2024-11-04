@@ -1,5 +1,5 @@
 import { resolve } from "node:path";
-import { DB, ITEMNAME, tableExists } from "./db";
+import { DB, ITEMNAME, SHELFID, tableExists } from "./db";
 import { ITEM, ITEMID, ITEMIMAGE, ITEMTYPE } from "./db"; // item collumns
 import { SHELFITEM } from "./db";
 
@@ -77,7 +77,21 @@ export async function deleteItem(item_id: number): Promise<[boolean, string]> {
 }
 
 
-// check if item in shelf
+export async function checkShelfItem(shelf_id: number, item_id: number): Promise<[boolean, string]> {
+    const exists = await tableExists(SHELFITEM);
+    if(!exists) return [false, "ShelfItem table does not exist."];
+
+    return new Promise((resolve) => {
+            DB.run(`SELECT * FROM ${SHELFITEM} WHERE ${SHELFID} = ? AND ${ITEMID} = ?`,
+            [shelf_id, item_id],
+            (err: any, row: any) => {
+                if (err) resolve([false, `${err}`]);
+                else if (row) resolve([true, `${item_id} is not in the shelf ${shelf_id}.`]);
+                else resolve([false, `${item_id} is not in the shelf ${shelf_id}.`]);
+            }
+        );
+    });
+}
 
 
 // add to shelf
