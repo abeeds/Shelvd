@@ -47,6 +47,7 @@ export async function updateShelf(shelf_id: number, new_name: string=``, new_des
     await DB.run(query, params, (err: any) => {
         if(err) success = [false, `${err}`];
     })
+
     return success;
 }
 
@@ -59,8 +60,8 @@ export async function deleteShelf(shelf_id: number): Promise<[boolean, string]> 
     await DB.run(`DELETE FROM ${SHELF} WHERE ${SHELFID} = ?`, [shelf_id], (err:any) => {
         if(err) success = [false, `${err}`];
     })
-    return success;
 
+    return success;
 }
 
 
@@ -76,6 +77,7 @@ export async function checkSubshelf(parent_id: number, child_id: number): Promis
             else if (row) success = [true, `${child_id} is a child of ${parent_id}.`]
         }
     );
+
     return success;
 }
 
