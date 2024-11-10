@@ -41,7 +41,18 @@ export async function updateType(type_id: number, new_name: string): Promise<[bo
 }
 
 
-export async function deleteType(type_name: string): Promise<[boolean, string]> {
+export async function deleteType(type_id: string): Promise<[boolean, string]> {
     const exists = await tableExists(TYPE);
     if(!exists) return [false, "Type table does not exist."];
+
+    return new Promise((resolve) => {
+        DB.run(`
+            DELETE FROM ${TYPE} WHERE ${TYPEID} = ?`,
+            [type_id],
+            (err: any) => {
+                if (err) resolve([false, `${err}`]);
+                resolve([true, `Type ${type_id} deleted successfully.`]);
+            }
+        );
+    })
 }
