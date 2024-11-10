@@ -182,6 +182,24 @@ export function initTables() {
                 WHERE ${SHELFID} = OLD.${SHELFID};
             END;`
         );
+        DB.run(`
+            CREATE TRIGGER inc_shelf_count
+            AFTER INSERT ON ${SHELFITEM}
+            BEGIN
+                UPDATE ${SHELFCOUNT}
+                SET ${SHELFROWS} = ${SHELFROWS} + 1
+                WHERE ${SHELFID} = NEW.${SHELFID};
+            END;`
+        );
+        DB.run(`
+            CREATE TRIGGER dec_shelf_count
+            AFTER DELETE ON ${SHELFITEM}
+            BEGIN
+                UPDATE ${SHELFCOUNT}
+                SET ${SHELFROWS} = ${SHELFROWS} - 1
+                WHERE ${SHELFID} = OLD.${SHELFID};
+            END;`
+        );
     });
 }
 
