@@ -1,9 +1,8 @@
 - DB
     - shelf
         - fix returns, should return a promise like in db-items.ts
-    - add release date to items
-    - fail safes
-        - check if a table exists before trying to create it in createTable
+    - add release date and tags to items
+    - when deleting a type, set the type column for all items with that type to null
 - Front end
     - pages to design:
         - shelves
