@@ -22,9 +22,22 @@ export async function insertType(type_name: string): Promise<[boolean, string]> 
 }
 
 
-export async function updateType(old_name: string, new_name: string): Promise<[boolean, string]> {
+export async function updateType(type_id: number, new_name: string): Promise<[boolean, string]> {
     const exists = await tableExists(TYPE);
     if(!exists) return [false, "Type table does not exist."];
+
+    return new Promise((resolve) => {
+        DB.run(`
+            UPDATE ${TYPE}
+            SET ${TYPENAME} = ?
+            WHERE ${TYPEID} = ?`,
+            [new_name, type_id],
+            (err: any) => {
+                if (err) resolve([false, `${err}`]);
+                resolve([true, `Type ${type_id} updated successfully.`]);
+            }
+        );
+    });
 }
 
 
