@@ -44,12 +44,12 @@ export async function updateShelf(shelf_id: number, new_name: string=``, new_des
     params.push(shelf_id);
 
     // run query
-    let success: [boolean, string] = [true, `Shelf ${shelf_id} updated successfully.`];
-    await DB.run(query, params, (err: any) => {
-        if(err) success = [false, `${err}`];
-    })
-
-    return success;
+    return new Promise((resolve) => {
+        DB.run(query, params, (err: any) => {
+            if(err) resolve([false, `${err}`]);
+            resolve([true, `Shelf ${shelf_id} updated successfully.`]);
+        });
+    });
 }
 
 
