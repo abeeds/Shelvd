@@ -1,3 +1,4 @@
+import { resolve } from "node:path";
 import { DB,  tableExists } from "./db";
 import { SHELF, SHELFID, SHELFNAME, SHELFDESC } from "./db"; // shelf columns
 import { SUBSHELF, PARENTID, CHILDID } from "./db"; // subshelf columns
@@ -11,16 +12,16 @@ export async function insertShelf(shelf_name: string, shelf_desc: string=``): Pr
     const exists = await tableExists(SHELF);
     if(!exists) return [false, "Shelf table does not exist."];
 
-    let success: [boolean, string] = [true, "Shelf created successfully."];
-    await DB.run(`INSERT INTO ${SHELF} ${SHELF_COLS}
-        VALUES ($shelfname, $shelfdesc)`, {
-        $shelfname: shelf_name,
-        $shelfdesc: shelf_desc
-    }, (err: any) => {
-        if(err) success = [false, `${err}`];
+    return new Promise((resolve) => {
+        DB.run(`INSERT INTO ${SHELF} ${SHELF_COLS}
+            VALUES ($shelfname, $shelfdesc)`, {
+            $shelfname: shelf_name,
+            $shelfdesc: shelf_desc
+        }, (err: any) => {
+            if(err) resolve([false, `${err}`]);
+            resolve([true, "Shelf created successfully."])
+        })
     })
-
-    return success;
 }
 
 
