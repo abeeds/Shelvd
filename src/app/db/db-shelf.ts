@@ -104,15 +104,15 @@ export async function deleteSubshelf(parent_id: number, child_id: number): Promi
     const exists = await tableExists(SUBSHELF);
     if(!exists) return [false, "Subshelf table does not exist."];
 
-    let success: [boolean, string] = [true, "Deleted subshelf relation."];
-    await DB.run(`DELETE FROM ${SUBSHELF} WHERE ${PARENTID} = ? AND ${CHILDID} = ?`,
-        [parent_id, child_id],
-        (err: any) => {
-            if(err) success = [false, `${err}`];
-        }
-    );
-
-    return success;
+    return new Promise((resolve) => {
+        DB.run(`DELETE FROM ${SUBSHELF} WHERE ${PARENTID} = ? AND ${CHILDID} = ?`,
+            [parent_id, child_id],
+            (err: any) => {
+                if(err) resolve([false, `${err}`]);
+                resolve([true, "Deleted subshelf relation."]);
+            }
+        );
+    });
 }
 
 
