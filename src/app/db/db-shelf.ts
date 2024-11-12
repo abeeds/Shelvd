@@ -87,16 +87,16 @@ export async function insertSubshelf(parent_id: number, child_id: number): Promi
     const table_exists = await tableExists(SUBSHELF);
     if(!table_exists) return [false, "Subshelf table does not exist."];
 
-    let success: [boolean, string] = [true, `${child_id} is now a child of ${parent_id}`];
-    await DB.run(`INSERT INTO ${SUBSHELF} ${SUBSHELF_COLS}
-        VALUES (?, ?)`,
-        [parent_id, child_id],
-        (err: any) => {
-            if (err) success = [false, `${err}`];
-        }
-    )
-
-    return success;
+    return new Promise((resolve) => {
+        DB.run(`INSERT INTO ${SUBSHELF} ${SUBSHELF_COLS}
+            VALUES (?, ?)`,
+            [parent_id, child_id],
+            (err: any) => {
+                if (err) resolve([false, `${err}`]);
+                resolve([true, `${child_id} is now a child of ${parent_id}`]);
+            }
+        );
+    });
 }
 
 
