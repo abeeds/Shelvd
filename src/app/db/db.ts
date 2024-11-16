@@ -13,6 +13,7 @@ export const ITEMID = "item_id";
 export const ITEMNAME = "item_name";
 export const ITEMIMAGE = "item_img"; // url to image
 export const ITEMTYPE = "item_type"; // direct to another table
+export const ITEMRELEASE = "item_release_date";
 
 export const SHELF = "Shelf";
 export const SHELFID = "shelf_id";
@@ -108,6 +109,7 @@ export function initTables() {
                 ${ITEMNAME} TEXT,
                 ${ITEMIMAGE} TEXT,
                 ${ITEMTYPE} INTEGER,
+                ${ITEMRELEASE} DATE,
                 FOREIGN KEY (${ITEMTYPE}) REFERENCES ${TYPE}(${TYPEID})
             )`
         );
