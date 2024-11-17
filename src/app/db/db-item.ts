@@ -1,5 +1,5 @@
 import { DB, SHELFID, tableExists } from "./db";
-import { ITEM, ITEMID, ITEMIMAGE, ITEMTYPE, ITEMNAME, ITEMRELEASE,} from "./db"; // item collumns
+import { ITEM, ITEMID, ITEMIMAGE, ITEMTYPE, ITEMNAME, ITEMRELEASE,} from "./db"; // item columns
 import { SHELFITEM } from "./db";
 
 const ITEM_COLS = `(${ITEMNAME}, ${ITEMIMAGE}, ${ITEMTYPE}, ${ITEMRELEASE})`;

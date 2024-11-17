@@ -1,7 +1,15 @@
 - DB
     - shelf
         - fix returns, should return a promise like in db-items.ts
-    - add release date and tags to items
+    - write functions for tags
+        - insert
+        - update
+        - delete
+    - write functions to add tags to items
+        - insert 
+        - update
+        - delete
+    - write triggers to count items with specific tags
     - when deleting a type, set the type column for all items with that type to null
 - Front end
     - pages to design:
