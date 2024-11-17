@@ -226,8 +226,7 @@ export function initTables() {
             BEGIN
                 DELETE FROM ${ITEMTAG}
                 WHERE ${TAGNAME} = OLD.${TAGNAME};
-            END
-            `
+            END;`
         );
     });
 }
