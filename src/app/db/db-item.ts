@@ -1,23 +1,25 @@
-import { DB, ITEMNAME, SHELFID, tableExists } from "./db";
-import { ITEM, ITEMID, ITEMIMAGE, ITEMTYPE } from "./db"; // item collumns
+import { DB, SHELFID, tableExists } from "./db";
+import { ITEM, ITEMID, ITEMIMAGE, ITEMTYPE, ITEMNAME, ITEMRELEASE,} from "./db"; // item collumns
 import { SHELFITEM } from "./db";
 
-const ITEM_COLS = `(${ITEMNAME}, ${ITEMIMAGE}, ${ITEMTYPE})`;
+const ITEM_COLS = `(${ITEMNAME}, ${ITEMIMAGE}, ${ITEMTYPE}, ${ITEMRELEASE})`;
 const SHELFITEM_COLS = `(${SHELFID}, ${ITEMID})`;
 
 
+// release date should be in format yyyy-mm-dd
 export async function insertItem(
     item_name: string,
     item_image: string=``,
-    item_type: string=``
+    item_type: string=``,
+    item_release: string=``,
 ): Promise<[boolean, string]> {
     const exists = await tableExists(ITEM);
     if(!exists) return [false, "Item table does not exist"];
 
     return new Promise((resolve) => {
         DB.run(`INSERT INTO ${ITEM} ${ITEM_COLS}
-            VALUES (?, ?, ?)`,
-            [item_name, item_image, item_type],
+            VALUES (?, ?, ?, ?)`,
+            [item_name, item_image, item_type, item_release],
             (err: any) => {
                 if (err) resolve([false, `${err}`]);
                 resolve([true, "Item created successfully."]);
@@ -31,7 +33,8 @@ export async function updateItem(
     item_id: number,
     new_name: string=``,
     new_image: string=``,
-    new_type: string=``
+    new_type: string=``,
+    new_date
 ): Promise<[boolean, string]> {
     const exists = await tableExists(ITEM);
     if(!exists) return [false, "Item table does not exist"];
