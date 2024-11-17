@@ -34,7 +34,7 @@ export async function updateItem(
     new_name: string=``,
     new_image: string=``,
     new_type: string=``,
-    new_date
+    new_release: string=``
 ): Promise<[boolean, string]> {
     const exists = await tableExists(ITEM);
     if(!exists) return [false, "Item table does not exist"];
@@ -53,6 +53,10 @@ export async function updateItem(
         if(params) query += `, `;
         query += `${ITEMTYPE} = ? `;
         params.push(new_type);
+    } if(new_release) {
+        if(params) query += `, `;
+        query += `${ITEMRELEASE} = ? `;
+        params.push(new_release);
     }
     query += `WHERE ${ITEMID} = ?`;
     params.push(item_id);
