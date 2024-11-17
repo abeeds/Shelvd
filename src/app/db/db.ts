@@ -109,7 +109,7 @@ export function initTables() {
                 ${ITEMNAME} TEXT,
                 ${ITEMIMAGE} TEXT,
                 ${ITEMTYPE} INTEGER,
-                ${ITEMRELEASE} DATE,
+                ${ITEMRELEASE} TEXT,
                 FOREIGN KEY (${ITEMTYPE}) REFERENCES ${TYPE}(${TYPEID})
             )`
         );
