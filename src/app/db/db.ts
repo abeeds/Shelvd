@@ -41,6 +41,9 @@ export const SHELFROWS = 'shelf_rows';
 export const TAG = 'Tag';
 export const TAGNAME = 'tag_name';
 
+export const ITEMTAG = 'ItemTag';
+// tag_name, item_id
+
 
 // GET TABLE DATA
 
@@ -142,9 +145,17 @@ export function initTables() {
                 ${TAGNAME} TEXT PRIMARY KEY
             )`
         );
+        DB.run(`CREATE TABLE ${ITEMTAG} (
+                ${ITEMID} INTEGER,
+                ${TAGNAME} TEXT,
+                PRIMARY KEY (${ITEMID}, ${TAGNAME}),
+                FOREIGN KEY (${ITEMID}) REFERENCES ${ITEM}(${ITEMID}),
+                FOREIGN KEY (${TAGNAME}) REFERENCES ${TAG}(${TAGNAME})
+            )`
+        );
 
         // update row counts for each table after insert or delete
-        const tables = [ITEM, SHELF, SUBSHELF, SHELFITEM, TYPE, TAG];
+        const tables = [ITEM, SHELF, SUBSHELF, SHELFITEM, TYPE, TAG, ITEMTAG];
         for (const table of tables) {
             DB.run(`INSERT INTO ${TABLECOUNT} (${TCTABLENAME}, ${TCROWCOUNT})
                 VALUES (?, ?)`,
