@@ -220,6 +220,15 @@ export function initTables() {
                 WHERE ${SHELFID} = OLD.${SHELFID};
             END;`
         );
+        DB.run(`
+            CREATE TRIGGER delete_tag
+            AFTER DELETE ON ${TAG}
+            BEGIN
+                DELETE FROM ${ITEMTAG}
+                WHERE ${TAGNAME} = OLD.${TAGNAME};
+            END
+            `
+        );
     });
 }
 
