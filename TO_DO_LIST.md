@@ -1,6 +1,4 @@
 - DB
-    - shelf
-        - fix returns, should return a promise like in db-items.ts
     - write functions for tags
         - insert
         - update
@@ -9,8 +7,10 @@
         - insert 
         - update
         - delete
-    - write triggers to count items with specific tags
-    - when deleting a type, set the type column for all items with that type to null
+    - Triggers
+        - count how many items have a tag
+            - update count on insert and delete
+        - when deleting a type, set the type column for all items with that type to null
 - Front end
     - pages to design:
         - shelves
