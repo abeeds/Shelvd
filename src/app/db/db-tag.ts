@@ -37,3 +37,15 @@ export async function updateTag(id: number, new_name: string): Promise<[boolean,
     });
 }
 
+
+export async function deleteTag(id: number): Promise<[boolean, string]> {
+    const exists = await tableExists(TAG);
+    if(!exists) return [false, "Tag table does not exist"];
+
+    return new Promise((resolve) => {
+        DB.run(`DELETE FROM ${TAG} WHERE ${TAGID} = ?`, [id], (err:any) => {
+            if(err) resolve([false, `${err}`]);
+            resolve([true, `Tag ${id} deleted.`]);
+        });
+    });
+}
