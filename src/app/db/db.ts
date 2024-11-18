@@ -43,7 +43,7 @@ export const TAGID = 'tag_id';
 export const TAGNAME = 'tag_name';
 
 export const ITEMTAG = 'ItemTag';
-// tag_name, item_id
+// tag_id, item_id
 
 
 // GET TABLE DATA
@@ -149,10 +149,10 @@ export function initTables() {
         );
         DB.run(`CREATE TABLE ${ITEMTAG} (
                 ${ITEMID} INTEGER,
-                ${TAGNAME} TEXT,
-                PRIMARY KEY (${ITEMID}, ${TAGNAME}),
+                ${TAGID} INTEGER,
+                PRIMARY KEY (${ITEMID}, ${TAGID}),
                 FOREIGN KEY (${ITEMID}) REFERENCES ${ITEM}(${ITEMID}),
-                FOREIGN KEY (${TAGNAME}) REFERENCES ${TAG}(${TAGNAME})
+                FOREIGN KEY (${TAGID}) REFERENCES ${TAG}(${TAGID})
             )`
         );
 
