@@ -1,4 +1,5 @@
 - DB
+    - move shelfitem functions to its own file
     - write functions for tags
         - insert
         - update

@@ -39,6 +39,7 @@ export const SHELFCOUNT = 'ShelfCount';
 export const SHELFROWS = 'shelf_rows';
 
 export const TAG = 'Tag';
+export const TAGID = 'tag_id';
 export const TAGNAME = 'tag_name';
 
 export const ITEMTAG = 'ItemTag';
@@ -142,7 +143,8 @@ export function initTables() {
             )`
         );
         DB.run(`CREATE TABLE ${TAG} (
-                ${TAGNAME} TEXT PRIMARY KEY
+                ${TAGID} TEXT PRIMARY KEY AUTOINCREMENT,
+                ${TAGNAME} TEXT UNIQUE
             )`
         );
         DB.run(`CREATE TABLE ${ITEMTAG} (
