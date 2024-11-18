@@ -3,6 +3,10 @@
 ## File Structure
 ### Database - /src/app/db
 All functions and methods modifying the SQLite database can be found here.
+All functions from files dedicated to specific tables return this
+kind of array: [boolean, message]. The boolean indicates whether the function 
+was capable of doing its task. The message is there to indicate why it may have
+failed.
 
 #### db.ts
 This file contains some basic methods for accessing and initializing tha database.
@@ -15,6 +19,14 @@ The following functions are available in this file:
 - tableExists(table_name: string) - returns a promise of a boolean indicating if the specified table exists
 - initTables() - this function initializes all the base tables used in this project
 - initDB() - establishes a connection to the database, also initializes the DB if it has not been created yet
+
+#### db-shelf.ts
+This file contains methods for modifying the shelf table.
+
+The following functions are available in this file:
+- insertShelf(shelf_name: string, shelf_desc: string='')
+- updateShelf(shelf_id: number, new_name: string='', new_desc: string='')
+- deleteShelf(shelf_id: number)
 
 ## Development server
 
