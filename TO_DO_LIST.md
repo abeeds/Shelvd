@@ -1,9 +1,4 @@
 - DB
-    - move shelfitem functions to its own file
-    - write functions for tags
-        - insert
-        - update
-        - delete
     - write functions to add tags to items
         - insert 
         - update
