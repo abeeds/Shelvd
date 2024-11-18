@@ -1,6 +1,20 @@
 # Shelvd
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.5.
+## File Structure
+### Database - /src/app/db
+All functions and methods modifying the SQLite database can be found here.
+
+#### db.ts
+This file contains some basic methods for accessing and initializing tha database.
+It also contains most of the constants used across the other database files.
+For example, you will be able to find table and column names as strings exported here.
+
+The following functions are available in this file:
+- numTables() - returns a promise containing the number of tables available
+- getColumns(table_name: string) - returns a promise of an array of column names for the specified table
+- tableExists(table_name: string) - returns a promise of a boolean indicating if the specified table exists
+- initTables() - this function initializes all the base tables used in this project
+- initDB() - establishes a connection to the database, also initializes the DB if it has not been created yet
 
 ## Development server
 

@@ -1,8 +1,4 @@
 - DB
-    - write functions to add tags to items
-        - insert 
-        - update
-        - delete
     - Triggers
         - count how many items have a tag
             - update count on insert and delete
