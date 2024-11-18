@@ -78,9 +78,9 @@ export function getColumns(table_name: string): Promise<any[]> {
 }
 
 
-export function tableExists(name: string): Promise<Boolean> {
+export function tableExists(table_name: string): Promise<Boolean> {
     return new Promise((resolve) => {
-        DB.get(`SELECT name FROM sqlite_master WHERE type='table' AND name='${name}'`, (err: any, row: any) => {
+        DB.get(`SELECT name FROM sqlite_master WHERE type='table' AND name='${table_name}'`, (err: any, row: any) => {
             if (row) resolve(true);
             else resolve(false);
         });
