@@ -4,7 +4,7 @@
 ### Database - /src/app/db
 All functions and methods modifying the SQLite database can be found here.
 All functions from files dedicated to specific tables return this
-kind of array: [boolean, message]. The boolean indicates whether the function 
+kind of array: `[boolean, message]`. The boolean indicates whether the function 
 was capable of doing its task. The message is there to indicate why it may have
 failed.
 
