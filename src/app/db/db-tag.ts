@@ -22,7 +22,7 @@ export async function insertTag(tag_name: string): Promise<[boolean, string]> {
 }
 
 
-export async function updateTag(id: number, new_name: string) {
+export async function updateTag(id: number, new_name: string): Promise<[boolean, string]> {
     const exists = await tableExists(TAG);
     if(!exists) return [false, "Item table does not exist"];
 
