@@ -21,3 +21,17 @@ export async function addTagToItem(item_id: number, tag_id: number): Promise<[bo
     });
 }
 
+
+export async function delTagFromItem(item_id: number, tag_id: number) {
+    const exists = await tableExists(ITEMTAG);
+    if(!exists) return [false, "ItemTag table does not exist."];
+
+    return new Promise((resolve) => {
+        DB.run(`DELETE FROM ${ITEMTAG} WHERE ${TAGID} = ? AND ${ITEMID} = ?` ,
+            [tag_id, item_id], (err:any) => {
+                if(err) resolve([false, `${err}`]);
+                resolve([true, `Tag removed.`]);
+            }
+        );
+    });
+}
