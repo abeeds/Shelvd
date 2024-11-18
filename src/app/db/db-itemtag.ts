@@ -5,7 +5,7 @@ import { ITEMTAG, TAGID, ITEMID } from "./db";
 const ITEMTAG_COLS = `(${ITEMID}, ${TAGID})`;
 
 
-export async function addTag(item_id: number, tag_id: number): Promise<[boolean, string]> {
+export async function addTagToItem(item_id: number, tag_id: number): Promise<[boolean, string]> {
     const exists = await tableExists(ITEMTAG);
     if(!exists) return [false, "ItemTag table does not exist."];
 
@@ -21,5 +21,3 @@ export async function addTag(item_id: number, tag_id: number): Promise<[boolean,
     });
 }
 
-
-// delete
