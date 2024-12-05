@@ -1,8 +1,10 @@
 <h1>Create Shelf</h1>
 <form>
     <label for="shelf_name">Shelf Name: </label>
-    <input type="text" id="shelf_name" name="shelf_name">
-    <br>
+    <input type="text" id="shelf_name" [formControl]="shelf_name"><br>
+
     <label for="shelf_desc">Shelf Description: </label>
-    <input type="text" id="shelf_desc" name="shelf_desc">
+    <input type="text" id="shelf_desc" [formControl]="shelf_desc"><br>
+
+    <button type="submit" class="primary">Create Shelf</button>
 </form>
